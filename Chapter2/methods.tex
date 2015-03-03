@@ -1,27 +1,27 @@
 \section{Methods}
 
-SNP array data from the Omni2.5 platform and sequence data from the HiSeq2000 platform was processed with PLINK v1.07 and \gls{GATK} v2.x respectively unless otherwise noted.
+SNP array data from the Omni2.5 platform and sequence data from the HiSeq2000 platform was processed with PLINK v1.07\cite{Purcell2007} and \gls{GATK} v2.x respectively unless otherwise noted.
 
 \subsection{SNP array QC}
 \label{subsec:chipQC}
 The populations were genotyped on either the Illumina HumanOmni2.5-4 (quad) or -8 (octo) platforms. Table \ref{tab:chips_preQC_summary} summarizes the content of each chip prior to QC.
 
-\input{Chapter2/tab/chips_preQC_summary}
+\input{tab/chips_preQC_summary}
 
 The \gls{QC} was carried out with PLINK\cite{Purcell2007}, Python and GNU Unix utilities. We removed samples without proper consent. We updated genders for samples with genotype gender issues as determined by PLINK in accordance with new data collection of genders.
 
 \subsubsection{Harmonisation of .strand files}
 The .strand file contains information on how to flip alleles from Illumina TOP alleles to the forward strand. The purpose of the harmonisation of the .strand files is to obtain a single clean strand file containing only SNPs common to both original strand files. A summary of the original .strand files is given in table \ref{tab:strand_files}.
-\input{Chapter2/tab/strand_files}
+\input{tab/strand_files}
 
 First we updated the positions in the quad (Omni2.5-4) .strand file from \gls{GRCh}\cite{10.1371/journal.pbio.1001091} build 36 to build 37 using liftOver.\cite{Karolchik01012014} SNPs that failed to be remapped were excluded. After updating the build we removed \glspl{SNP} in the .miss and the .multiple files from the quad and octo (Omni2.5-8) .strand files; the .miss file contains \glspl{SNP} that did not reach the required threshold for mapping to the genome and the .multiple file contains \glspl{SNP} that had more than 1 high quality match to the genome. For each position in the .multiple file we exclude all but one of the \glspl{SNP}.
 After updating the build and removing \glspl{SNP} in the .miss and .multiple files we removed duplicate coordinates from the .strand file. We prerably kept the reference \gls{SNP}. \footnote{http://www.ncbi.nlm.nih.gov/SNP/get\_html.cgi?whichHtml=how\_to\_submit\#REFSNP} In the absence of a reference SNP the first record was kept. If both positions corresponded to reference SNPs, then the first one was kept.
 Afterwards we excluded \glspl{SNP} not present in both .strand files; i.e. we required the coordinate and the alleles to be identical. The SNP exclusion from the strand files is summarized in table \ref{tab:strand_file_exclusion_summary}.
-\input{Chapter2/tab/strand_file_exclusion_summary}
+\input{tab/strand_file_exclusion_summary}
 
 \subsubsection{Harmonisation of data (.bim and .bed) files}
 From the quad and octo \gls{SNP} array genotype data we removed rsIDs not present in the processed strand files. For the quad it was necessary to use the harmonized strand file with the original quad nomenclature as doing otherwise would create duplicate rsIDs. We updated the quad positions and rsIDs. SNPs that failed to be remapped were excluded. After updating the quad rsIDs we flipped the quad and octo \glspl{SNP} to the forward strand according to the processed .strand files. Finally we extract \glspl{SNP} common between .strand and .bim files and common between the quad and octo .bim files. The SNP exclusion from the genotype data files is summarized in table \ref{tab:bim_file_exclusion_summary}.
-\input{Chapter2/tab/bim_file_exclusion_summary}
+\input{tab/bim_file_exclusion_summary}
 
 The data was split by population and platform (i.e. quad and octo) and \gls{QC} was carried out for individual datasets. The \gls{QC} that was carried out for each population is described elsewhere.\cite{Gurdasani2015} All steps except heterozygosity calculations and IBD sample pruning were carried out with PLINK; heterozygosity calculations are erroneous for PLINK. In summary the QC consisted of sequential checks of
 \begin{enumerate}
@@ -35,9 +35,10 @@ The data was split by population and platform (i.e. quad and octo) and \gls{QC} 
 \end{enumerate}
 
 \subsection{Sequencing}
-The ability to sequence depends on the sequence content and the ability to map depends on the uniqueness of the sequence and the presence and length of indels.
+Blood samples were collected by local collaborators. Library preparation and sequencing on Illumina HiSeq2000 machines were carried out at the \gls{WTSI}.
+
 \subsection{Downsampling}
-Coverage was calculated from the number of mapped reads, which was calculated with samtools\cite{Li15082009} flagstat. Downsampling to lower coverage was carried out with \gls{GATK} PrintReads.\cite{DePristo2011} As the coverage drops the ability to call rare \glspl{SNP} decreases (figure \ref{fig:downsampling_SNP_count} and table\ref{tab:downsampling_omni_intersection}). At lower coverage the genotype correlation between the calls from the SNP array and sequencing platforms is also reduced and especially for rare variants (figure \ref{fig:downsampling_correlation_omni}.
+Coverage was calculated from the number of mapped reads, which was calculated with samtools\cite{Li15082009} flagstat. Downsampling to lower coverage was carried out with \gls{GATK} PrintReads.\cite{DePristo2011} As the coverage drops the ability to call rare \glspl{SNP} decreases (figure \ref{fig:downsampling_SNP_count} and table\ref{tab:downsampling_omni_intersection}). At lower coverage the genotype correlation between the calls from the SNP array and sequencing platforms is also reduced and especially for rare variants (figure \ref{fig:downsampling_correlation_omni}).
 
 \subsection{Pre-processing of raw reads}
 We carried out downsampling of the raw reads to a lower coverage prior to pre-processing. We carried out the following pre-processing steps for the 100bp length reads stored in .bam files in sequence:
@@ -55,37 +56,48 @@ We mark duplicates for exclusion, because sequencing errors are otherwise propag
 %Recommendations here: https://www.broadinstitute.org/gatk/guide/article?id=1247
 
 \subsection{Variant Calling}
-We evaluated different variant calling software packages. We decided to use \gls{GATK} \gls{UG} based on its ability to call more variants with a quality above 4 than any other variant caller (figure \ref{venn4_varcall_Platypus_filter_QUAL4_incl_MNPs_TiTv}). We did not evaluate whether all of the called variants were true positives, but we did take note of the variants unique to \gls{UG} having a relatively high Ti/Tv ratio, which indicates that the variants are true positives. Furthermore the variant were counted prior to filtering, which would further filter out false positives. Hence a high sensitivity at this stage is preferable. If more time had been available, then we would have calculated the sensitivity and specificity for each variant caller by comparison to a truth set.
+We evaluated different variant calling software packages. We decided to use \gls{GATK} \gls{UG} based on its ability to call more variants with a quality above 4 than any other variant caller (figure \ref{fig:venn4_varcall_Platypus_filter_QUAL4_incl_MNPs_TiTv}). We did not evaluate whether all of the called variants were true positives, but we did take note of the variants unique to \gls{UG} having a relatively high Ti/Tv ratio, which indicates that the variants are true positives. Furthermore the variant were counted prior to filtering, which would further filter out false positives. Hence a high sensitivity at this stage is preferable. If more time had been available, then we would have calculated the sensitivity and specificity for each variant caller by comparison to a truth set.
 
-Minimum read mapping quality required to consider a read for analysis with the HaplotypeCaller (HCMappingQualityFilter) (\-\-min\_mapping\_quality\_score 20)
-HC DuplicateReadFilter
-Target coverage threshold for downsampling to coverage HC \-\-downsampling\_type BY\_SAMPLE \-\-downsample\_to\_coverage 250
-Minimum base quality required to consider a base for calling \-\-min\_base\_quality\_score 10 (UG17)
-The minimum phred-scaled confidence threshold at which variants should be called -stand\_call\_conf.
-The minimum phred-scaled confidence threshold at which variants should be emitted (and filtered with LowQual if less than the calling threshold) \-\-standard\_min\_confidence\_threshold\_for\_emitting
-HC only maxNumHaplotypesInPopulation 128
-max\_alternate\_alleles 6
-%INDELs, especially those disrupting protein-coding regions of the genome, have been strongly associated with human diseases.
-%http://www.ncbi.nlm.nih.gov/clinvar?term=human%5Borgn%5D
+Because of the shallow coverage (<10x coverage per sample) and the small number of samples we changed the default Phred quality score threshold at which variants should be called and emitted from 30 to 4 as per the GATK GuideBook\footnote{page 13 of https://www.broadinstitute.org/gatk/guide/pdfdocs/GATK_GuideBook_2.7-4.pdf}. Otherwise we used default parameter values and default filters, which are described in the documentation of \gls{UG}\footnote{https://www.broadinstitute.org/gatk/gatkdocs/org_broadinstitute_gatk_tools_walkers_genotyper_UnifiedGenotyper.php}; i.e.
+\begin{itemize}
+\item \-\-downsampling\_type BY\_SAMPLE
+\item \-\-downsample\_to\_coverage 250
+\item \-\-min\_base\_quality\_score 17
+\item \-\-max\_alternate\_alleles 6
+\item DuplicateReadFilter to filter out duplicate reads.
+\item UnmappedReadFilter to filter out unmapped reads.
+\item MappingQualityUnavailableFilter to filter out reads with a mapping quality of zero.
+\item BadMateFilter to filter out reads whose mate maps to a different contig.
+\end{itemize}
 
 \subsection{Variant Filtering}
 
-%\input{Chapter2/tab/vr_sets}
-\input{tab/vr_sets}
+The Gaussian mixture model of \gls{GATK} \gls{VR} was used for filtering called variants. It was run simultaneously across all autosomes. The filtering is based on a \gls{VQSLOD} score, which is the log odds ratio of being a true variant versus being false under the trained Gaussian mixture model. The annotations we used for the model were
+\begin{itemize}
+\item Total depth over all samples (Coverage in versions prior to 2.4)
+\item Phred-scaled p-value using Fisher’s exact test to detect strand bias (FisherStrand)
+\item Consistency of the site with two segregating haplotypes (HaplotypeScore)
+\item U-based z-approximation from the Mann-Whitney rank sum test for mapping qualities (MQRankSum)
+\item Variant confidence divided by unfiltered depth of non-reference samples (QualByDepth)
+\item Root mean square of the mapping quality of the reads across all samples (RMSMappingQuality)
+\item U-based z-approximation from the Mann-Whitney rank sum test for the distance from the end of the read for reads with the alternate allele (ReadPosRankSumTest)
+\end{itemize}
 
-VQSLOD is the log odds ratio of being a true variant versus being false.
+We used training datasets with prior probabilities in accordance with best practices at the time (table \ref{tab:vr_sets}).
+
+\input{tab/vr_sets}
 
 We carried out a comparison of variant calling and variant filtering strategies. Specifically we tried doing variant calling and filtering within and across the 3 sequenced populations. We found that variant calling and filtering across the cohorts yields the greatest number of variants.
 
 \subsection{Genotype refinement}
 
 We chose to carry out imputation with \gls{1000G} phase 1 as a reference panel, because of the small samples size. Using a reference panel was shown to improve imputation accuracy, which was calculated by comparison with SNP array genotypes.
-\input{Chapter2/fig/imp_accu_improv_1000G}
+\input{fig/imp_accu_improv_1000G}
 
 We carried out imputation with the full 1000G phase 1 reference panel and the reduced reference panel distributed with Beagle3. Rare variants with less than 5 occurences were removed from the March 2012 release of the Beagle3 distributed 1000G phase 1 reference panel. The reduced reference panel was shown to improve better than the full reference panel (figure \ref{fig:imp_accu_beagle).
 
 To identify the best imputation software and imputation approach we tried out various approaches. Ultimately we decided that imputation with Beagle3\cite{Browning20071084} using a \gls{1000G} phase 1 reference panel yielded a greater imputation accuracy upon comparison with SNP array genotypes (figure \ref{fig:imp_accu_improv}.
-\input{Chapter2/fig/imp_accu_improv}
+\input{fig/imp_accu_improv}
 
 Ultimately we decided that imputation with Beagle3\cite{Browning20071084} using a reduced \gls{1000G} phase 1 reference panel yielded the greatest imputation accuracy.
 
@@ -95,7 +107,7 @@ Ultimately we decided that imputation with Beagle3\cite{Browning20071084} using 
 \subsection{Calculation of apparent sample sizes}
 For the calculation of apparent sample sizes the values in table \ref{tab:chip_costs} were used. The total cost  for $n$ number of samples is calculated with equation \ref{eq:apparent_sample_size}. The apparent sample size at a given coverage and \gls{MAF} is calculated as the product of the imputation accuracy at that \gls{MAF} and the cost at that coverage. Computational costs are not included, but assuming a CPU hour costs GBP 0.17, disk storage is free and no steps are repeated, then the computational cost for 100 samples at 8x is at least GBP 1500. In comparison SNP array associated computational costs are negligible and do not require an extensive framework.
 
-\begin{table}[]
+\begin{table}[htp]
 \centering
 \begin{tabular}{l|r}
  & Cost (GBP) \\ \hline

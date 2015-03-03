@@ -1,10 +1,10 @@
 \begin{table}[h]
 \centering
-\begin{tabular}{lllll}
-              & Known & Training & Truth & Prior Probability \\
+\begin{tabular}{l|lllr}
+              & Known & Training & Truth & Prior Probability \\ \hline
 HapMap 3.3    & False & True     & True  & 15                \\
 1000G Omni2.5 & False & True     & False & 12                \\
-dbSNP 135     & True  & False    & False & 8                
+dbSNP 135     & True  & False    & False & 8                 \\ \hline                
 \end{tabular}
 \caption{SNP sets used for training of the \gls{VQSR} model an d determination of known and novel counts.}
 \label{tab:vr_sets}

@@ -1,15 +1,14 @@
 % I need to figure out how to avoid this table from exceeding the page width.
 %\begin{landscape}
-\begin{longtable}{lllllll}
-%\centering
-\caption{Sample sets to be included in design of the African chip array. Size refers to size of mapped sequence reads stored in bam file format.}
-\label{table:samples}
+%%%\begin{longtable}{lllllll}
+\begin{table}[htp]
+\centering
 %\resizebox{\textwidth}{!}{%
-%\begin{tabular}
+\begin{tabular}{llrrllr}
 \hline
 Country & Ethnolinguistic group & Count & Depth & Source & Location & Size (TB) \\
 \hline
-\endhead % all the lines above this will be repeated on every page
+%%%\endhead % all the lines above this will be repeated on every page
 Uganda & Baganda & 1567 & 4x & UG2G & WTSI & 40.4 \\
 Uganda & Banyarwanda & 199 & 4x & UG2G & WTSI & 5.1 \\
 Uganda & Rwandese Ugandan & 76 & 4x & UG2G & WTSI & 1.9 \\
@@ -72,6 +71,9 @@ Nigeria & Yoruba (YRI) & 109 & 4x & 1000G & 1000G & 2.3 \\
 %South Africa & Xhosa & 8 & 30x & SAHGP &  \\
 \hline
 Total* &  & 3031 &  &  & & 81.7
-%\end{tabular}
-\end{longtable}
+\end{tabular}
+%\end{longtable}
 %\end{landscape}
+\caption{Sample sets to be included in design of the African chip array. Size refers to size of mapped sequence reads stored in bam file format.}
+\label{table:samples}
+\end{table}
