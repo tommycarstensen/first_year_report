@@ -1,0 +1,35 @@
+\subsubsection{Calling of short indels and structural variants}
+With UG we will only make a call in the low coverage data, if the number of consensus indels exceeds a threshold of 5 (--min\_indel\_count\_for\_genotyping 5), which is the default value and the value used for phase 1 of 1000G.
+%1000G low coverage indel calling by the Broad - "if a candidate indel allele was present in at least 5 reads at a site, it would be passed over to the next step for genotyping, or otherwise it was excluded."
+We furthermore use PINDEL, GINDEL, Dindel, samtools, MATE-CLEVER and SOAPdenovo to call indels shorter than 100bp and deletions longer than 100bp. Breakdancer is used to identify structural variants (SVs) in trios. GenomeSTRiP is used for discovery of deletions. We will use best practices of each method to filter variants prior to creating a consensus set. For Pindel for example it will be a requirement that an indel appear in more than 3 samples and with more than 10 supporting reads in total among all samples.
+%GoNL Indels (1-20bp) "GATK UG and at least one other algorithm"
+%GoNL Deletions (20-100bp) "more than one method" "at least 3 families and transmitted to at least 1 child"
+%GoNL Deletions (>100bp) "at least two algorithms" "at least 3 families and transmitted to at least 1 child"
+
+We remove indels with the maximum number of alternate alleles.
+%1000G called indels as biallelic.
+Similar to 1000G we will remove protein-coding frameshift indels exclusive to low coverage samples and do post-hoc filtering of short indels with a support vector machine (SVM) or random forest (RF) machine learning approach and by applying a MAF threshold of 0.5\%. The latter machine learning method has been used successfully at the Broad Institute. One could classify indels by:
+\begin{enumerate}
+\item length (continuous or classified)
+\item type (homopolymer run (HR) with runs of 6 or more identical nucleotides, tandem repeat (TR))
+\item frameshift/nonframeshift in coding regions
+\item tandem repeat length (dinucleotide repeat, trinucleotide repeat, STR/microsatellite (2-5/6/9), minisatellite (10-60)
+%INSERTION-DELETION VARIANTS IN 179 HUMAN GENOMES - Table 3 - Characteristics of indels
+\item HR insertion (more likely), HR deletion (less likely)
+\item tandem repeat type (CG, non-CG)
+\item SNP at same site, no SNP at same site
+\item biallelic, multialleic
+\item inside/outside RepeatMasker regions
+\item P site / non-P site; i.e. the reference base not N, depth not less than half of average, depth not twice of average, less than 20\% of reads at position have MQ of 0, base not covered. Calculate averages for the autosomes and the X chromosome independently.
+\item allele balance
+\item strand bias
+\item mapping quality
+\item number of supporting non-reference reads
+\item distance to nearby indels
+\item cytoband: gneg, gpos25, gpos50, gpos75, gpos100, acen, gvar
+\end{enumerate}
+
+The NIST NA12878 truth set currently does not hold information on structural variants (SVs). We therefore carry out calling of SVs with multiple callers, apply default calling thresholds and use a consensus dataset as the final SV dataset.
+
+Other variant callers to consider are listed in the table below.
+\input{tables/INDELcallers}

@@ -1,0 +1,24 @@
+\begin{table}[h]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{ll|rrr|rrr}
+\hline
+                                                                    &              & \multicolumn{3}{c}{Omni2.5-4}    & \multicolumn{3}{c}{Omni2.5-8}            \\
+Filtering step                                                      & Chromosome   & Before    & Filtered & After     & Before       & Filtered    & After       \\ \hline
+\multirow{3}{*}{Update from build 36 to build 37}                   & All          & 2,449,906 & 1,890    & 2,448,016 & \multicolumn{3}{c}{\multirow{3}{*}{N/A}} \\
+                                                                    & Autosomal    & 2,388,854 & 327      & 2,388,527 & \multicolumn{3}{l}{}                     \\
+                                                                    & Chromosome X & 57,623    & 6        & 57,617    & \multicolumn{3}{l}{}                     \\ \hline
+\multirow{3}{*}{Exclusion of SNPs in the .miss and .multiple files} & All          & 2,448,016 & 39,714   & 2,408,302 & 2,379,514    & 44,559      & 2,334,955   \\
+                                                                    & Autosomal    & 2,388,527 & 36,465   & 2,352,062 & 2,320,543    & 40,391      & 2,280,152   \\
+                                                                    & Chromosome X & 57,617    & 2,429    & 55,188    & 55,902       & 2,853       & 53,049      \\ \hline
+\multirow{3}{*}{Exclusion of duplicates}                            & All          & 2,408,302 & 9,510    & 2,398,792 & 2,334,955    &             & 2,379,514   \\
+                                                                    & Autosomal    & 2,352,062 & 6,794    & 2,345,268 & 2,280,152    & 3,148       & 2,277,004   \\
+                                                                    & Chromosome X & 55,188    & 2,715    & 52,473    & 53,049       & 2,424       & 50,625      \\ \hline
+\multirow{3}{*}{Exclusion of SNPs not common to the .strand files}  & All          & 2,398,792 & 88,876   & 2,309,914 & 2,329,381    & 19,465      & 2,309,914   \\
+                                                                    & Autosomal    & 2,345,268 & 86,948   & 2,258,318 & 2,277,004    & 18,684      & 2,258,318   \\
+                                                                    & Chromosome X & 52,473    & 1,906    & 50,567    & 50,625       & 58          & 55,902      \\ \hline
+\end{tabular}
+}
+\caption{Summary of exclusions from strand files for all chromosomes, autosomes and the X-chromosome.}
+\label{tab:strand_file_exclusion_summary}
+\end{table}

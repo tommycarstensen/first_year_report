@@ -1,0 +1,29 @@
+\section{Results}
+
+\subsection{Data description}
+\label{sec:agv_data_description}
+Related and unrelated male and female samples from 3 different African populations were genotyped using the Illumina HumanOmni2.5 genotype chip array and sequenced on an Illumina HiSeq 2500 to different depths of coverage (table \ref{tab:samples}, figure \ref{fig:coverage}). The \gls{QC} of the samples genotyped on the Illumina HumanOmni2.5-4 and 2.5-8 platforms is described elsewhere\cite{Gurdasani2015} and on page \pageref{subsec:chipQC}.
+\input{Chapter2/tab/samples}
+Each of the two methods for obtaining genotypes yields a different number of non-monomorphic autosomal SNPs. Approximately 20\% of the SNPs from the Omni2.5 chip are monomorphic (table \ref{tab:chip_SNPs}).
+\input{Chapter2/tab/chip_SNPs}
+The majority of the sequenced \glspl{SNP} are already present in phase 1 of \gls{1000G}\cite{1000G2012}, but novel SNPs are present in all three populations (figure \ref{fig:intersection}).
+
+\subsection{Comparison of variant calling and refinement methods}
+\subsection{Comparison of variant calling software}
+\subsection{Comparison of refinement software and reference panels}
+
+\subsection{Statistics after downsampling}
+
+As the coverage drops the ability to call rare \glspl{SNP} decreases (figure \ref{fig:downsampling_SNP_count} and table\ref{tab:downsampling_omni_intersection}). At lower coverage the genotype correlation between the calls from the SNP array and sequencing platforms is also reduced and especially for rare variants (figure \ref{fig:downsampling_correlation_omni}.
+
+\input{Chapter2/fig/downsampling_SNP_count}
+\input{Chapter2/fig/coverage}
+\input{Chapter2/fig/intersection}
+\input{Chapter2/tab/downsampling_omni_intersection}
+
+\input{Chapter2/fig/downsampling_SNP_count}
+
+\subsection{Apparent sample size}
+
+Figure - Apparent sample sizes for common, rare and very rare variants without data processing costs. 
+Table - Costs associated with acquiring genotypes via two different platforms.

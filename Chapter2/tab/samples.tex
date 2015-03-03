@@ -1,0 +1,17 @@
+\begin{table}[h]
+\centering
+\resizebox{\textwidth}{!}{
+\begin{tabular}{llllllll}
+                          &         & \begin{tabular}[c]{@{}l@{}}HiSeq\\ samples\end{tabular} & \textless{depth}\textgreater & \begin{tabular}[c]{@{}l@{}}Omni\\ samples\end{tabular} & \begin{tabular}[c]{@{}l@{}}Sample\\ intersection\end{tabular} & \begin{tabular}[c]{@{}l@{}}HiSeq\\ variants\end{tabular} & \begin{tabular}[c]{@{}l@{}}Omni\\ variants\end{tabular} \\ \hline
+Baganda                   &         & 100                                                     & 4x                            & 4778                                                   & 94                                                            & 20,461,747                                               & 2,124,005                                               \\ \hline
+Zulu                      &         & 100                                                     & 4x                            & 100                                                    & 95                                                            & 20,267,592                                               & 2,050,451                                               \\ \hline
+\multirow{5}{*}{Ethiopia} & Amhara  & 24                                                      & 8x                            & 46                                                     & 24                                                            & \multirow{5}{*}{20,452,231}                              & \multirow{5}{*}{2,143,095}                              \\ \cline{2-6}
+                          & Gumuz   & 24                                                      & 8x                            & 0                                                      & 0                                                             &                                                          &                                                         \\ \cline{2-6}
+                          & Oromo   & 24                                                      & 8x                            & 31                                                     & 19                                                            &                                                          &                                                         \\ \cline{2-6}
+                          & Somali  & 24                                                      & 8x                            & 52                                                     & 20                                                            &                                                          &                                                         \\ \cline{2-6}
+                          & Wolayta & 24                                                      & 8x                            & 0                                                      & 0                                                             &                                                          &                                                         \\ \hline
+\end{tabular}
+}
+\caption{Average sequencing depth of coverage (<depth>) for each of the 3 African populations and count of samples sequenced on the the Illumina HiSeq 2000 platform (HiSeq) and genotyped on the Illumina Omni2.5 platform (Omni2.5) after \gls{QC}. Intersection refers to the count of samples at the intersection between the two platforms. Variants refers to the number of called variants.}
+\label{tab:samples}
+\end{table}

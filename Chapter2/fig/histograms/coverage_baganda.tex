@@ -1,0 +1,14 @@
+\begin{tikzpicture}
+\begin{axis}[
+    ybar,
+    ymin=0
+]
+\addplot +[
+    hist={
+        bins=7,
+        data min=0.5,
+        data max=4
+    }   
+] table [y index=0] {Chapter2/histograms/data/coverage_baganda.csv};
+\end{axis}
+\end{tikzpicture}

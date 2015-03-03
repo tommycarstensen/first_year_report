@@ -1,0 +1,21 @@
+\begin{table}[h]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{ll|rrr|rrr}
+\hline
+                                                                            &              & \multicolumn{3}{c}{Omni2.5-4}    & \multicolumn{3}{c}{Omni2.5-8}            \\
+Filtering step                                                              & Chromosome   & Before    & Filtered & After     & Before       & Filtered    & After       \\ \hline
+\multirow{3}{*}{Exclusion of SNPs missing in .strand files}                 & All          & 2,450,000 & 140,086  & 2,309,914 & 2,379,855    & 69.941      & 2,309,914   \\
+                                                                            & Autosomal    & 2,390,395 & 132.078  & 2,258,317 & 2,314,174    & 61,235      & 2,252,939   \\
+                                                                            & Chromosome X & 57,061    & 6,905    & 50,156    & 55,208       & 5,145       & 50,063      \\ \hline
+\multirow{3}{*}{Update from build 36 to build 37}                           & All          & 2,309,914 & 412      & 2,309,502 & \multicolumn{3}{c}{\multirow{3}{*}{N/A}} \\
+                                                                            & Autosomal    & 2,258,317 & 1        & 2,258,316 & \multicolumn{3}{l}{}                     \\
+                                                                            & Chromosome X & 50,156    & 0        & 50,156    & \multicolumn{3}{l}{}                     \\ \hline
+\multirow{3}{*}{Exclusion of SNPs not common to all data and .strand files} & All          & 2,309,502 & 7,139    & 2,302,363 & 2,309,914    & 7,551       & 2,302,363   \\
+                                                                            & Autosomal    & 2,258,316 & 7,001    & 2,251,315 & 2,252,939    & 1,624       & 2,251,315   \\
+                                                                            & Chromosome X & 50,156    & 136      & 50,020    & 50,063       & 43          & 50,020      \\ \hline
+\end{tabular}
+}
+\caption{Summary of exclusions from bim and bed files of SNPs on all chromosomes, autosomes and the X chromosome.}
+\label{tab:bim_file_exclusion_summary}
+\end{table}

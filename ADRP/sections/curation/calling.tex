@@ -1,0 +1,30 @@
+\subsection{Variant calling}
+After deciding on the best algorithm we will carry out variant calling. We will carry out joint variant calling across as many samples as possible to enable a greater sensitivity for low frequency variants and improve the ability to filter out false variants. We have also previously shown that calling across populations and doing genotype refinement yields better concordance and correlation with SNP arrays.
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=0.8\textwidth]{calling}
+\caption{Homogenised calling across all datasets to generate a single panel}
+\label{fig:calling}
+\end{figure}
+%Datasets generated with unique Illumina chemistry, and those with different coverages will need to be called in separate subsets. GATK3.3+ UnifiedGenotyper (UG) and GATK3.3+ HaplotypeCaller (HC) will be used for calling SNPs from low and high coverage data, respectively. Multiple samples will be called simultaneously with UnifiedGenotyper, whereas HaplotypeCaller will be applied to individual samples in GVCF mode and subsequently joint genotyping will be carried out with GenotypeGVCFs. For compatibility reasons it is important that the same versions of HaplotypeCaller and GenotypeGVCFs are used.
+%http://gatkforums.broadinstitute.org/discussion/5051/are-gatk-versions-3-compatible
+During variant calling UG by default downsamples each sample randomly to a maximum coverage of 250 (--downsampling\_type BY\_SAMPLE and --downsample\_to\_coverage 250). We will use the default minimum base quality for UG, which is currently 17 (--min\_base\_quality\_score 17). %10 for HC
+At each site we don't call more than the 6 best alternate alleles (--max\_alternate\_alleles 6).
+For low coverage data we use calling and emission thresholds (--stand\_call\_conf and --stand\_emit\_conf) of 10 as the sample count is greater than 100 as per \href{https://www.broadinstitute.org/gatk/guide/pdfdocs/GATK_GuideBook_2.7-4.pdf}{GATK best practises}. %page 13
+%For high coverage data we use thresholds of 30 in accordance with GATK best practices.
+%Indels will be called with a plethora of software packages (see the next section).
+
+%If pedigree information is available, then this will be used by UnifiedGenotyper %and GenotypeGVCFs
+%in calculation of the InbreedingCoeff annotation, which is used for subsequent variant filtering. Pedigree information will also be used for refinement and phasing. Incomplete pedigrees will be inferred from IBD matrices for sequenced and non-sequenced samples in each cohort.
+
+%\input{sections/curation/indelcalling}
+
+\subsubsection{Calling of chromosomes X and Y}
+The X chromosome will be called jointly for males and females with the same ploidy, because the memory and CPU use of UG otherwise grows intensely. Likewise the pseudoautosomal regions (PARs) 1 and 2 on the X chromosome will be called like the autosomes; i.e. jointly for males and females with all samples treated as diploid. The Y chromosome will also be treated as diploid due to the UG memory and CPU issue, when doing haploid variant calling, but variant calling will only be carried out for males. The PARs on the Y chromosome are masked in the reference sequence and not subject to calling. An excessive number of heterezogyous calls of haploid genotypes can be utilized for a QC step of sites and samples; thresholds to be decided.
+%The mitochondrial variants will be called with GATK, VarScan2\cite{Koboldt2012} and MitoSeek and the union set recalled and annotated with GATK prior to filtering. VarScan is chosen, because it performs well at extreme read depths.\cite{Stead2013} MitoSeek is a software package dedicated to calling variants from mtDNA reads. When calling with GATK the ploidy will be set to the mean coverage in the MT contig divided by the mean coverage in the somatic chromosomes.
+%ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/technical/reference/phase2_reference_assembly_sequence/README_human_reference_20110707
+%http://gatkforums.broadinstitute.org/discussion/1214/can-i-use-gatk-on-non-diploid-organisms
+%GoNL - "Consensus sequences were called by GATK."
+
+%\input{tables/ploidies}
