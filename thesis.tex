@@ -128,9 +128,9 @@
 
 %\printglossary[type=\acronymtype, title=List of acronyms and other abbreviations, toctitle=List of abbreviations]
 
-\printglossary[title=List of terms, toctitle=List of terms and abbreviations]
+%\printglossary[title=List of terms, toctitle=List of terms and abbreviations]
 
-\printglossary[type=\acronymtype]
+\printglossary[type=\acronymtype, title=List of acronyms, toctitle=List of acronyms]
 
 \listoffigures
 
@@ -144,13 +144,13 @@
 % ******************************** Main Matter *********************************
 \mainmatter
 
-\import{Chapter1/}{introduction}
+\import{Introduction/}{introduction}
 % Cost effective study design in Africa
-\import{Chapter2/}{chapter2}
+\import{Chapter1/}{main}
 % Reference panel
-\import{Chapter3/}{chapter3}
+\import{Chapter3/}{main}
 % Chip design
-\import{Chapter4/}{chapter4}
+\import{Chapter4/}{main}
 %\include{ADRP/0main}
 \import{ADRP/}{0main.tex}
 \import{Chapter5/}{future}
@@ -198,6 +198,6 @@
 %\end{appendices}
 %
 %% *************************************** Index ********************************
-\printthesisindex % If index is present
+%\printthesisindex % If index is present
 
 \end{document}

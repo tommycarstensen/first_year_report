@@ -1061,16 +1061,16 @@ wish to left align your text}
 
 
 % ***************************** Create the index *******************************
-\ifPHD@index
-    \RequirePackage{makeidx}
-    \makeindex
-    \newcommand{\printthesisindex}{
-        \cleardoublepage
-        \phantomsection
-        \printindex}
-\else
-    \newcommand{\printthesisindex}{}
-\fi
+%\ifPHD@index
+%    \RequirePackage{makeidx}
+%    \makeindex
+%    \newcommand{\printthesisindex}{
+%        \cleardoublepage
+%        \phantomsection
+%        \printindex}
+%\else
+%    \newcommand{\printthesisindex}{}
+%\fi
 
 % ***************************** Chapter Mode ***********************************
 % The chapter mode allows user to only print particular chapters with references
@@ -1182,9 +1182,9 @@ wish to left align your text}
 \begin{lrbox}{\PHD@submission}
 \begin{minipage}[c]{\textwidth}
 \begin{center}
-\large \submissiontext \par
+{\large Supervisor: Dr. Manjinder S. Sandhu \par}
 \vspace*{1ex}
-\large \textit {\@degree} \par
+{\large Supervisor: Dr. Joshua Randall \par}
 \end{center}
 \end{minipage}
 \end{lrbox}

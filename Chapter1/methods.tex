@@ -38,7 +38,17 @@ The data was split by population and platform (i.e. quad and octo) and \gls{QC} 
 Blood samples were collected by local collaborators. Library preparation and sequencing on Illumina HiSeq2000 machines were carried out at the \gls{WTSI}.
 
 \subsection{Downsampling}
-Coverage was calculated from the number of mapped reads, which was calculated with samtools\cite{Li15082009} flagstat. Downsampling to lower coverage was carried out with \gls{GATK} PrintReads.\cite{DePristo2011} As the coverage drops the ability to call rare \glspl{SNP} decreases (figure \ref{fig:downsampling_SNP_count} and table\ref{tab:downsampling_omni_intersection}). At lower coverage the genotype correlation between the calls from the SNP array and sequencing platforms is also reduced and especially for rare variants (figure \ref{fig:downsampling_correlation_omni}).
+Downsampling to a lower coverage was carried out to enable comparison of ultra low coverage study designs with low coverage and SNP array study designs. Samples were downsampled to average coverages of 8x, 4x, 2x, 1x and 0.5x. Downsampling was carried out on the raw reads converted to lanelet bam files prior to pre-processing to best simulate a real case scenario. Instead of downsampling by unit fractions\cite{10.1371/journal.pcbi.1002604}, downsampling was carried out to achieve a specific integer value coverage across all samples in a given population. The downsampling fraction\ref{eq:downsampling} was calculated from the initial coverage across all samples, which was calculated from the number of mapped reads, which was counted with samtools\cite{Li15082009} flagstat. The read length on the Illumina HiSeq2000 is 100. We divided by the number of base pairs in the human genome (3.1\gls{Gbp}) instead of the more appropriate number of non N bases in the reference genome (2.85\gls{Gbp}) to which reads can actually be mapped.
+
+\begin{equation}
+\text{downsampling factor} =  \frac
+{\text{read length} \times \text{count of mapped reads}}
+{\text{genome size} \times \text{count of samples}}
+\label{eq:downsampling}
+\end{equation}
+
+Downsampling to a lower coverage was carried out with \gls{GATK}Lite2.1 PrintReads.\cite{DePristo2011} For the Baganda dataset downsampled to 2x \gls{GATK}2.5 was used. Avoiding read mapping bias was not ensured by sorting the reads by read name before downsampling and resorting the downsampled reads by coordinate. After downsampling the reads were realigned and recalibrated as described in the next section.
+As the coverage drops the ability to call rare \glspl{SNP} decreases (figure \ref{fig:downsampling_SNP_count} and table\ref{tab:downsampling_omni_intersection}). At lower coverage the genotype correlation between the calls from the SNP array and sequencing platforms is also reduced and especially for rare variants (figure \ref{fig:downsampling_correlation_omni}).
 
 \subsection{Pre-processing of raw reads}
 We carried out downsampling of the raw reads to a lower coverage prior to pre-processing. We carried out the following pre-processing steps for the 100bp length reads stored in .bam files in sequence:
@@ -52,13 +62,16 @@ We carried out downsampling of the raw reads to a lower coverage prior to pre-pr
 \item Creation of MD tag with samtools calmd and indexing.
 \end{enumerate}
 
-We mark duplicates for exclusion, because sequencing errors are otherwise propagated in duplicates leading to false positive variant calls. Base quality doesn't have any impact on indel realignment, but having reads realigned properly improves the base recalibration model, because it reduces the number of artifactual SNPs. It supposedly improves accuracy of downstream processing steps. This assumption was never tested.
+We mark duplicates for exclusion, because sequencing errors are otherwise propagated in duplicates leading to false positive variant calls. Base quality doesn't have any impact on indel realignment, but having reads realigned properly improves the base recalibration model, because it reduces the number of artifactual \glspl{SNP}. It supposedly improves accuracy of downstream processing steps. This assumption was never tested.
 %Recommendations here: https://www.broadinstitute.org/gatk/guide/article?id=1247
 
 \subsection{Variant Calling}
 We evaluated different variant calling software packages. We decided to use \gls{GATK} \gls{UG} based on its ability to call more variants with a quality above 4 than any other variant caller (figure \ref{fig:venn4_varcall_Platypus_filter_QUAL4_incl_MNPs_TiTv}). We did not evaluate whether all of the called variants were true positives, but we did take note of the variants unique to \gls{UG} having a relatively high Ti/Tv ratio, which indicates that the variants are true positives. Furthermore the variant were counted prior to filtering, which would further filter out false positives. Hence a high sensitivity at this stage is preferable. If more time had been available, then we would have calculated the sensitivity and specificity for each variant caller by comparison to a truth set.
 
-Because of the shallow coverage (<10x coverage per sample) and the small number of samples we changed the default Phred quality score threshold at which variants should be called and emitted from 30 to 4 as per the GATK GuideBook\footnote{page 13 of https://www.broadinstitute.org/gatk/guide/pdfdocs/GATK_GuideBook_2.7-4.pdf}. Otherwise we used default parameter values and default filters, which are described in the documentation of \gls{UG}\footnote{https://www.broadinstitute.org/gatk/gatkdocs/org_broadinstitute_gatk_tools_walkers_genotyper_UnifiedGenotyper.php}; i.e.
+Variants were called in interval sizes of 10\gls{Mbp} without taking into consideration positions of centromeres and telomeres and density of variants. This impairs the ability to call variants at the end of regions and renders it impossible to call indels spanning two fragments.
+
+Because of the shallow coverage (\textless 10x coverage per sample) and the small
+number of samples we changed the default Phred quality score threshold at which variants should be called and emitted from 30 to 4 as per the \gls{GATK} GuideBook\footnote{page 13 of \url{https://www.broadinstitute.org/gatk/guide/pdfdocs/GATK_GuideBook_2.7-4.pdf}}. Otherwise we used default parameter values and default filters, which are described in the documentation of \gls{UG}\footnote{\url{https://www.broadinstitute.org/gatk/gatkdocs/org_broadinstitute_gatk_tools_walkers_genotyper_UnifiedGenotyper.php}}; i.e.
 \begin{itemize}
 \item \-\-downsampling\_type BY\_SAMPLE
 \item \-\-downsample\_to\_coverage 250
@@ -71,8 +84,7 @@ Because of the shallow coverage (<10x coverage per sample) and the small number 
 \end{itemize}
 
 \subsection{Variant Filtering}
-
-The Gaussian mixture model of \gls{GATK} \gls{VR} was used for filtering called variants. It was run simultaneously across all autosomes. The filtering is based on a \gls{VQSLOD} score, which is the log odds ratio of being a true variant versus being false under the trained Gaussian mixture model. The annotations we used for the model were
+The Gaussian mixture model of \gls{GATK} \gls{VR} was used for filtering called variants. The machine learning method was run simultaneously across all autosomes. The filtering is based on a \gls{VQSLOD} score, which is the log odds ratio of being a true variant versus being false under the trained Gaussian mixture model. The annotations we used for the model were
 \begin{itemize}
 \item Total depth over all samples (Coverage in versions prior to 2.4)
 \item Phred-scaled p-value using Fisher’s exact test to detect strand bias (FisherStrand)
@@ -83,26 +95,28 @@ The Gaussian mixture model of \gls{GATK} \gls{VR} was used for filtering called 
 \item U-based z-approximation from the Mann-Whitney rank sum test for the distance from the end of the read for reads with the alternate allele (ReadPosRankSumTest)
 \end{itemize}
 
-We used training datasets with prior probabilities in accordance with best practices at the time (table \ref{tab:vr_sets}).
-
+We used truth and training datasets with prior probabilities in accordance with best practices at the time (table \ref{tab:vr_sets}). The set of \gls{dbSNP}\cite{Wheeler01012007} variants is used to determine the \gls{TiTv} ratio for known and novel variants. The novel \gls{TiTv} ratio was found to be very dependent of dbSNP used. Therefore we used a truth sensitivity threshold of 96\% instead of considering the \gls{TiTv} ratio as a determinant for selecting a truth sensitivity threshold.
 \input{tab/vr_sets}
 
-We carried out a comparison of variant calling and variant filtering strategies. Specifically we tried doing variant calling and filtering within and across the 3 sequenced populations. We found that variant calling and filtering across the cohorts yields the greatest number of variants.
+We carried out a comparison of variant calling and variant filtering strategies. Specifically we tried doing variant calling and filtering within and across the 3 sequenced populations. We found that variant calling and filtering across the cohorts yields the greatest number of variants intersecting with the SNP array data.
 
 \subsection{Genotype refinement}
-
-We chose to carry out imputation with \gls{1000G} phase 1 as a reference panel, because of the small samples size. Using a reference panel was shown to improve imputation accuracy, which was calculated by comparison with SNP array genotypes.
+We carried out refinement and imputation with version 3.3.2 of Beagle.\cite{Browning20071084} We chose to carry out imputation with \gls{1000G} phase 1 as a reference panel, because of the small samples size. Using a reference panel was shown to improve imputation accuracy, which was calculated by comparison with SNP array genotypes.
 \input{fig/imp_accu_improv_1000G}
 
-We carried out imputation with the full 1000G phase 1 reference panel and the reduced reference panel distributed with Beagle3. Rare variants with less than 5 occurences were removed from the March 2012 release of the Beagle3 distributed 1000G phase 1 reference panel. The reduced reference panel was shown to improve better than the full reference panel (figure \ref{fig:imp_accu_beagle).
+We carried out imputation with the full 1000G phase 1 reference panel and the reduced reference panel distributed with Beagle3. Rare variants with less than 5 allele counts out of 1092 samples and multiallelic SNPs and indels were removed from the March 2012 release of the Beagle3 distributed 1000G phase 1 reference panel. The low frequency markers were omitted, because the genotype error rates for low frequency markers in 1000G is very high. This can possibly affect nearby markers according to Brian Browning. The reduced reference panel was shown to improve better than the full reference panel (figure \ref{fig:imp_accu_beagle}).
+\input{fig/imp_accu_beagle}
 
-To identify the best imputation software and imputation approach we tried out various approaches. Ultimately we decided that imputation with Beagle3\cite{Browning20071084} using a \gls{1000G} phase 1 reference panel yielded a greater imputation accuracy upon comparison with SNP array genotypes (figure \ref{fig:imp_accu_improv}.
+To identify the best imputation software and imputation approach we tried out various approaches. In addition to Beagle3 we carried out imputation with IMPUTE2\cite{10.1371/journal.pgen.1000529} with different parameter settings. We used IMPUTE2 without and with the \-\-pgs\_prob argument, which tells IMPUTE2 to estimate posterior probabilities. We used IMPUTE2 separately and in succession with Beagle3. Ultimately we decided that imputation with Beagle3\cite{Browning20071084} using a \gls{1000G} phase 1 reference panel yielded a greater imputation accuracy upon comparison with SNP array genotypes (figure \ref{fig:imp_accu_improv}).
 \input{fig/imp_accu_improv}
 
-Ultimately we decided that imputation with Beagle3\cite{Browning20071084} using a reduced \gls{1000G} phase 1 reference panel yielded the greatest imputation accuracy.
+Ultimately we decided that imputation with Beagle3 using a reduced \gls{1000G} phase 1 reference panel yielded the greatest imputation accuracy. We used an interval size of 2\gls{Mbp}. Fragments with few variants near centromeres and telemeres and in sparse regions were avoided by not allowing intervals to extend across centromeres and by extension of intervals until containing at least 400\gls{kbp} and 1000 variants. With the exception of fragments next to telomeres and large centromeres, an additional 150\gls{kbp} was included on either side of each fragment to avoid side effects. These fragment edges were not used for any donstream analysis.
 
 \subsection{WGS QC}
+We checked for heterozygosity and \gls{PCA} outliers after refinement, but did not exclude additional samples.
 
+\subsection{Correlation}
+Correlation is calculated irrespective of SNP call rate and posterior genotype probabilities. Hence the correlation is calculated for SNPs with high and low imputation quality. Dosages are calculated from the genotype probabilities and correlation is calculated using dosages. The correlation is calculated as a simple average of correlations in each MAF bin instead of calculating the correlation for all genotypes for all SNPs in each MAF bin. The calculation is only carried out for sites that are variant on both the chip and in the sequence data. Hence a correlation will not be calculated, when a monomorphic site is called and refined as a variant site and vice versa. The Omni2.5 SNP array has been shown to contain incorrectly genotyped SNPs\cite{Gurdasani2015}, but we cannot predict which ones they are, so we didn't take extra measures to take these into account and remove them from the dataset prior to calculation of correlations.
 
 \subsection{Calculation of apparent sample sizes}
 For the calculation of apparent sample sizes the values in table \ref{tab:chip_costs} were used. The total cost  for $n$ number of samples is calculated with equation \ref{eq:apparent_sample_size}. The apparent sample size at a given coverage and \gls{MAF} is calculated as the product of the imputation accuracy at that \gls{MAF} and the cost at that coverage. Computational costs are not included, but assuming a CPU hour costs GBP 0.17, disk storage is free and no steps are repeated, then the computational cost for 100 samples at 8x is at least GBP 1500. In comparison SNP array associated computational costs are negligible and do not require an extensive framework.
@@ -120,6 +134,6 @@ Omni2.5 & 183.33 \\
 \end{table}
 
 \begin{equation}
-\text{sequencing cost for} n \text{samples} = \text{lane cost} \times n/(8 \times 4 / \text{coverage}) + n \times \text{library cost}
+\text{sequencing cost for } n \text{ samples} = \text{lane cost} \times n/(8 \times 4 / \text{coverage}) + n \times \text{library cost}
 \label{eq:apparent_sample_size}
 \end{equation}
