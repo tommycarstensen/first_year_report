@@ -196,8 +196,14 @@
 % ***** Tommy additions *****
 \usepackage{pgfplots, pgfplotstable}
 \usepgfplotslibrary{statistics}
-\usepackage[acronym, toc]{glossaries}
-\usepackage{acronym}
+%http://en.wikibooks.org/wiki/LaTeX/Glossary
+%You may also want to use \usepackage[nonumberlist]{glossaries} to suppress the location list within the glossary.
+\usepackage[acronym, toc, nonumberlist]{glossaries}
+%\usepackage{acronym}
 \usepackage{import}
 \graphicspath{ {Chapter2/fig/} {Chapter3/fig/} {ADRP/fig/} {Figs/} }
 %\usepackage{subfig}
+
+%http://en.wikibooks.org/wiki/LaTeX/Floats,_Figures_and_Captions
+%It is sometimes desirable to have a caption appear on the side of a float, rather than above or below. The sidecap package can be used to place a caption beside a figure or table.
+\usepackage{sidecap}
