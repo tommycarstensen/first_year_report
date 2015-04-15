@@ -2,7 +2,7 @@
 
 \subsubsection{Data description}
 \label{sec:agv_data_description}
-Related and unrelated male and female samples from 3 different African populations were genotyped using the Illumina HumanOmni2.5 genotype chip array and sequenced on an Illumina HiSeq 2500 to different depths of coverage (table \ref{tab:samples}, figure \ref{fig:coverage}). The \gls{QC} of the samples genotyped on the Illumina HumanOmni2.5-4 and 2.5-8 platforms is described elsewhere\cite{Gurdasani2015} and on page \pageref{subsec:chipQC}.
+Related and unrelated male and female samples from 3 different African populations were genotyped using the Illumina HumanOmni2.5 genotype chip array and sequenced on an Illumina HiSeq 2000 to different depths of coverage (table \ref{tab:samples}, figure \ref{fig:coverage}). The \gls{QC} of the samples genotyped on the Illumina HumanOmni2.5-4 and 2.5-8 platforms is described elsewhere\cite{Gurdasani2015} and on page \pageref{subsec:chipQC}.
 \input{tab/samples}
 Each of the two methods for obtaining genotypes yields a different number of non-monomorphic autosomal SNPs. Approximately 20\% of the SNPs from the Omni2.5 chip are monomorphic (table \ref{tab:chip_SNPs}).
 \input{tab/chip_SNPs}
@@ -14,7 +14,8 @@ The majority of the sequenced \glspl{SNP} are already present in phase 1 of \gls
 
 \subsubsection{Statistics after downsampling}
 
-As the coverage drops the ability to call rare \glspl{SNP} decreases (figure \ref{fig:downsampling_SNP_count} and table\ref{tab:downsampling_omni_intersection}). At lower coverage the genotype correlation between the calls from the SNP array and sequencing platforms is also reduced and especially for rare variants (figure \ref{fig:downsampling_correlation_omni}.
+As the coverage drops the ability to call rare \glspl{SNP} decreases (figure \ref{fig:downsampling_SNP_count} and table\ref{tab:downsampling_omni_intersection}). At lower coverage the genotype correlation between the calls from the SNP array and sequencing platforms is also reduced and especially for rare variants (figure \ref{fig:downsampling_correlation_omni}\ref{fig:SN12f5}.
+\input{fig/SN12f5}
 
 \input{fig/downsampling_SNP_count}
 \input{fig/coverage}
@@ -24,6 +25,7 @@ As the coverage drops the ability to call rare \glspl{SNP} decreases (figure \re
 \input{fig/downsampling_SNP_count}
 
 \subsubsection{Apparent sample size}
+
 
 Figure - Apparent sample sizes for common, rare and very rare variants without data processing costs. 
 Table - Costs associated with acquiring genotypes via two different platforms.

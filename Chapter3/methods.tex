@@ -1,0 +1,36 @@
+\subsection{Methods}
+
+\subsubsection{Data description}
+
+\subsubsection{Phasing of refined genotypes}
+We phased the Beagle3 refined genotypes from the 3 populations with SHAPEIT2\cite{Delaneau2012} (release 644) for the 22 autosomes. This was preceded by a file format conversion from the Beagle3 format\footnote{http://faculty.washington.edu/browning/beagle/beagle\textunderscore3.3.2\_31Oct11.pdf} to the Oxford .gen/.sample format\footnote{https://mathgen.stats.ox.ac.uk/genetics\_software/shapeit/shapeit.html\#gensample}. We ran SHAPEIT2 across entire chromosomes and we ran with the HapMap II\cite{hapmap2007} estimated African population size\cite{Wright01031931}\cite{Wright1938}; i.e. \texttt{\-\-effective\-size} -{}-effective-size 17469. Otherwise we used default settings and ran the default 7 burn-in, 8 pruning and 20 main iterations. We used 100 states per window and used window sizes of 2\gls{Mbp}. We used the HapMap II genetic maps for estimation of recombination rates.
+
+\subsubsection{Merger of haplotype reference panels}
+After conversion of the 640 SHAPEIT2 generated haplotypes from the .haps/.sample format\footnote{https://mathgen.stats.ox.ac.uk/genetics\_software/shapeit/shapeit.html\#hapsample} to the IMPUTE2 .hap/.legend/.sample format\footnote{https://mathgen.stats.ox.ac.uk/genetics\_software/shapeit/shapeit.html\#haplegsample} we merged the reference panel with the existing \gls{1000G} phase 1 reference panel using the \-merge\_ref\_panels\_output\_ref\footnote{https://mathgen.stats.ox.ac.uk/impute/impute\_v2.html\#\-merge\_ref\_panels\_output\_ref} option.
+The method is well documented online.
+\footnote{https://mathgen.stats.ox.ac.uk/impute/impute\_v2.html\#merging\_panels}
+We ran on 2\gls{Mbp} fragments. We ran with the following default settings:
+\begin{itemize}
+\item \-khap 500\footnote{https://mathgen.stats.ox.ac.uk/impute/impute\_v2.html\#\-k\_hap} (number of reference haplotypes to use as templates when imputing missing genotypes)
+\item \-Ne 17649\footnote{https://mathgen.stats.ox.ac.uk/impute/impute\_v2.html\#\-Ne} (effective population size\cite{Wright01031931}\cite{Wright1938})
+\item \-buffer 250 \gls{kbp} (buffer region to include on each side of the analysis interval to prevent imputation quality from deteriotating near the edges)
+\item \-iter 30 (total number of iterations to perform)
+\item \-burnin 10 (number of iterations to discard, which don't contribute to the final imputation probabilities)
+\item \-k 80 ()
+\end{itemize}
+
+\begin{table}[]
+\centering
+\begin{tabular}{l|r|r}
+ & samples & variants \\ \hline
+ 3 populations & 320 & xxx \\
+ 1000G phase 1 & 1,092 & xxx \\
+ Merged & 1,412 &  \
+\end{tabular}
+\caption{Caption}
+\label{tab:my_label}
+\end{table}
+
+\subsubsection{SNP Chip Array QC and post-processing}
+\subsubsection{Phasing of Refined Genotypes}
+\subsubsection{Generation of a Merged Reference Panel}

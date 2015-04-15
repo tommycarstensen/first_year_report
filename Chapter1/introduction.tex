@@ -1,1 +1,25 @@
+Two main platforms exist for acquiring genotypes from across the genome. One is sequencing, which yields known and novel variants. Another is SNP array genotyping, which yields accurate genotypes for a subset of sites known to be variant in some populations. For comparison purposes of study designs in Africa we obtained genotypes from both platforms. We genotyped and sequenced samples from three distinct sub Saharan African populations in the East (Baganda), South (Zulu) and North (Ethiopia).
 
+Sequencing and \gls{SNP} chip genotyping are both able to provide genotype information on individuals from a population. They do so at different costs, at different levels of quality, at different density and with different downstream requirements on computational and human resources. In this chapter I investigate these aspects. The ability to sequence also depends on the sequence content and the ability to map sequence reads depends on the uniqueness of the sequence and the presence and length of indels. In addition to the \gls{SNP} array density it is also important, whether a population specific \gls{SNP} array and a population specific reference panel is used when imputing to achieve a greater SNP density, which allows for fine mapping. In section \ref{sec:reference_panel} I show that a continent specific array outperforms a 1000G reference panel in terms of imputation accuracy. In the next section \ref{sec:downsampling} I only focus on identifying the cheapest study design. I do so by comparison of sequence data generated on the Illumina HiSeq2000 platform and SNP array data generated on the Illumina HumanOmni2.5-4 (quad) and -8 (octo) platforms. Specifically I look at the ability to call rare and common variants at lower coverage (figure \ref{fig:downsampling_SNP_count}), the correlation with SNP array data at different coverages (figure \ref{tab:downsampling_omni_intersection}).
+
+I have carried out all the work described in this section with the exception of the QC and pre-processing of the raw sequence reads and the calculation of F_{st} values. This work was carried out by Martin Pollard and Savita Karthikeyan, respectively.
+
+\subsubsection{Data description}
+Samples from 3 different African populations were genotyped using the Illumina HumanOmni2.5 SNP array and sequenced on an Illumina HiSeq 2500 sequencing machine (tables \ref{tab:short_summary} and \ref{tab:samples}).
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{l|l|l|l|l}
+Region & Country & Population & Language & Language family \\ \hline
+East Africa & Uganda\cite{Asiki01022013} & Baganda & Luganda & Great Lakes Bantu \\ \hline
+Southern Africa & South Africa & Zulu & Zulu & Nguni, Southern Bantu \\ \hline
+\multirow{5}{*}{Northeast Africa} & \multirow{5}{*}{Ethiopia} & Amhara & Amharic & Semitic, Afro-Asiatic \\
+& & Gumuz & Gumuz & Nilo-Saharan? \\
+& & Oromo & Oromo & Cushitic, Afro-Asiatic \\
+& & Somali & Somali & Cushitic, Afro-Asiatic \\
+& & Wolayta & Wolayta & Omotic, Afro-Asiatic \\
+\hline
+\end{tabular}
+\caption{Short summary of the 3 cohorts from which sequencing and SNP array data was obtained.}
+\label{tab:short_summary}
+\end{table}
