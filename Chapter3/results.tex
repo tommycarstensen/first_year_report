@@ -1,5 +1,24 @@
 \subsection{Results}
 
+\subsubsection{Application of merged reference panel to SNP array data from African populations}
+After merger with the 1000G haplotypes we carry out imputation into a set of pipulations (table \ref{}), which have undergone the QC procedure described on page \pageref{QCagvchip}.
+
+\subsubsection{Correlation and mirror alleles after Beagle3 refinement}
+We calculated the genotype correlation for all 12 (4*(4-1)) possible heterozygous allele combinations. We found that the alleles with complementary mirror alleles (i.e. AT and CG), which can cause strand ambiguity, have lower overall correlation than other heterzogyous allele types (figure \ref{fig:imp_accu_allele}. Therefore we recommend that whenever possible alleles, which can cause problems in determining the relative strand, are not included on any future chip.
+
+\subsubsection{Imputation accuracy in African populations}
+The accuracy of imputation is different across African populations (figure \ref{fig:SN10f1}).
+\input{fig/SN10f1}
+
+\subsubsection{Comparison of SNP chip arrays - impact of reduction in chip SNP density on imputation accuracy}
+Reducing the SNP density of the array reduces the imputation accuracy (figure \ref{fig:SN10f2}). This argues for the development of denser arrays that better capture the LD structure in Africa and continent specific reference panels, which can improve the imputation accuracy.
+\input{fig/SN10f2}
+
+The greater reduction in imputation accuracy upon reduction of SNP density for populations poorly represented by the reference panel used for imputation (figure \ref{fig:SN10f3}) also highlights the need for a reference panel better representing the African continent.
+\input{fig/SN10f3}
+
+SN11
+
 \subsubsection{SNP Similarities and Differences between Populations}
 SNP Venn Diagrams
 \subsubsection{SNP Chip Array and Sequence Comparative Statistics for Each Population}
@@ -7,13 +26,12 @@ SNP Venn Diagrams
 \subsubsection{Comparison of SNP Chip Arrays}
 Comparison of YRI, LWK, MSL, xxx, xxx, Uganda, Zulu, Ethiopia capture.
 
-\subsubsection{}
+\subsubsection{Imputation using a merged reference panel with extra sites and haplotypes}
 
-Figure - Improvement in imputation accuracy for the South African population Sotho upon utilization of a merged reference panel.
+The improvement in imputation accuracy when using the merged reference panel is greatest for populations that were previously poorly represented in the default \gls{1000G} reference panel (figure \ref{fig:SN11f1}). Because Southern Africa is not at all represented in \gls{1000G} the improvement in imputation accuracy is greatest for the Sotho population from South Africa and it is so across the entire \gls{MAF} range (figure \ref{fig:sotho_imput_improv}).
+\input{fig/SN11f1}
+\input{fig/sotho_imput_improv}
 
-Figure - Correlation between improvement in imputation accuracy (y-axis) and smallest FST from a 1000G population (x-axis). The FST is calculated between each African population and each of the 1000G populations. The smallest value is plotted on the x-axis. The improvement in imputation accuracy - as measured by change in overall r2 reported by IMPUTE2 when using a 1000G and a 1000G+AGV reference panel - is plotted on the y-axis. Presumably Sotho improves more than any other population, because no South African population is present in 1000G, whereas the AGV reference panel contains a Zulu population. Likewise an infinitesimal improvement is observed for the Igbo population, because the neighboring Yoruba population is already present in 1000G. However, all African populations improve to a higher accuracy upon using the AGV reference panel in combination with 1000G and on its own (data not shown).
 
-\subsubsection{Correlation and mirror alleles}
-We calculated the genotype correlation for all 12 (4*(4-1)) possible heterozygous allele combinations. We found that the alleles with complementary mirror alleles (i.e. AT and CG), which can cause strand ambiguity, have lower overall correlation than other heterzogyous allele types (figure \ref{fig:imp_accu_allele}. Therefore we recommend that whenever possible alleles, which can cause problems in determining the relative strand, are not included on any future chip.
+Figure - Correlation between improvement in imputation accuracy (y-axis) and smallest \glssymbol{FST} from a \gls{1000G} population (x-axis). The \glssymbol{FST} is calculated between each African population and each of the \gls{1000G} populations. The smallest value is plotted on the x-axis. The improvement in imputation accuracy - as measured by change in overall \glssymbol{r2} reported by IMPUTE2 when using a \gls{1000G} and \gls{1000G}+\gls{AGV} reference panel - is plotted on the y-axis. Presumably Sotho improves more than any other population, because no South African population is present in \gls{1000G}, whereas the \gls{AGV} reference panel contains a Zulu population. Likewise an infinitesimal improvement is observed for the Igbo population, because the neighboring Yoruba population is already present in \gls{1000G}. However, all African populations improve to a higher accuracy upon using the AGV reference panel in combination with \gls{1000G} and on its own (data not shown).
 
-\input{Chapter3/fig/imp_accu_allele}
