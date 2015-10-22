@@ -1,0 +1,93 @@
+%1000G numbers parsed from
+%ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/supporting/hd_genotype_chip/
+
+%    74 ../QC/pops/LWK/LWK.postQC.autosomes.fam
+
+%grep -f <(awk '{print substr($1,12,10)}' /lustre/scratch114/projects/uganda_gwas/QC/omni2.5-8_20120809_gwa_uganda_gtu_flipped.postQC.autosomes.fam) /lustre/scratch113/projects/agv/users/tc9/metadata/pop.dic | awk '{print $2}' | sort | uniq -c
+
+%grep -f <(awk '{print substr($1,12,10)}' /lustre/scratch114/projects/uganda_gwas/QC/omni2.5-8_20120809_gwa_uganda_gtu_flipped.postQC.autosomes.fam) <(grep -f /lustre/scratch114/projects/ug2g/metadata/ug2g_uganda_gwas_intersection_343_samples.txt /lustre/scratch114/projects/ug2g/metadata/ug2g.2000.samples.txt) | awk '{print $4}' | sort | uniq -c | sort -k1nr,1
+%    251 Baganda
+%     49 Banyarwanda
+%     13 RwandeseUgandan
+%     12 Banyankole
+%      8 Mukiga
+%      7 Murundi
+%      2 Mutanzania
+%      1 Basoga
+
+%grep -f <(awk '{print substr($1,12,10)}' /lustre/scratch114/projects/uganda_gwas/QC/omni2.5-8_20120809_gwa_uganda_gtu_flipped.postQC.autosomes.fam) /lustre/scratch113/projects/agv/users/tc9/QC/pops/*/*.postQC.autosomes.fam | cut -d: -f1 | sort | uniq -c | sort -k1nr,1
+%    223 /lustre/scratch113/projects/agv/users/tc9/QC/pops/Banyarwanda_octo/Banyarwanda_octo.postQC.autosomes.fam
+%    197 /lustre/scratch113/projects/agv/users/tc9/QC/pops/Baganda_octo/Baganda_octo.postQC.autosomes.fam
+%     97 /lustre/scratch113/projects/agv/users/tc9/QC/pops/Barundi/Barundi.postQC.autosomes.fam
+%     28 /lustre/scratch113/projects/agv/users/tc9/QC/pops/Baganda_quad/Baganda_quad.postQC.autosomes.fam
+
+%grep -f <(awk '{print substr($1,12,10)}' /lustre/scratch114/projects/uganda_gwas/QC/omni2.5-8_20120809_gwa_uganda_gtu_flipped.postQC.autosomes.fam) /lustre/scratch113/projects/agv/users/tc9/metadata/hiseq2omni/uganda.intersect.dic | awk '{print $1}' | grep -w -f - /lustre/scratch113/projects/agv/users/tc9/metadata/pop.dic | awk '{print $2}' | sort | uniq -c
+%     94 Baganda
+
+
+\begin{table}[htp]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lrlllr}
+\hline
+Population & Sample count & Source & Platform & Algorithm & Intersection \\
+\hline
+%%%\endhead % all the lines above this will be repeated on every page
+%%%Uganda & 4778 & Uganda GPC & Omni2.5-8 & Illuminus & 343 UG2G and 94 AGVP \\
+Baganda & 3585 & Uganda GPC & Omni2.5-8 & Illuminus & 251 UG2G and 94 AGVP \\
+Banyarwanda & 422 & Uganda GPC & Omni2.5-8 & Illuminus & 49 UG2G \\
+RwandeseUgandan & 202 & Uganda GPC & Omni2.5-8 & Illuminus & 13 UG2G \\
+Banyankole & 147 & Uganda GPC & Omni2.5-8 & Illuminus & 12 UG2G \\
+Bakiga & 60 & Uganda GPC & Omni2.5-8 & Illuminus & 8 UG2G \\
+Barundi & 191 & Uganda GPC & Omni2.5-8 & Illuminus & 7 UG2G \\
+Mutanzania & 44 & Uganda GPC & Omni2.5-8 & Illuminus & 2 UG2G \\
+Basoga & 16 & Uganda GPC & Omni2.5-8 & Illuminus & 1 UG2G \\
+Mufumbira & 5 & Uganda GPC & Omni2.5-8 & Illuminus & 0 \\
+Mutooro & 10 & Uganda GPC & Omni2.5-8 & Illuminus & 0 \\
+Other & 96 & Uganda GPC & Omni2.5-8 & Illuminus & 0 \\
+
+Baganda & 90 & AGVP & Omni2.5-4 & Illuminus & 28* AGVP \\
+Baganda & 197 & AGVP & Omni2.5-8 & Illuminus & 27* AGVP and 13 UG2G \\
+Banyarwanda & 83 & AGVP & Omni2.5-4 & Illuminus & 0 \\
+Banyarwanda & 223 & AGVP & Omni2.5-8 & Illuminus & 24 UG2G \\
+Barundi & 97 & AGVP & Omni2.5-8 & Illuminus & 3 UG2G \\
+Fula & 74 & AGVP & Omni2.5-8 & Illuminus & 0 \\
+Ga-Adangbe & 90 & AGVP & Omni2.5-4 & Illuminus & 0 \\
+Ga-Adangbe & 11 & AGVP & Omni2.5-8 & Illuminus & 0 \\
+Igbo & 99 & AGVP & Omni2.5-4 & Illuminus & 0 \\
+Jola & 79 & AGVP & Omni2.5-8 & Illuminus & 0 \\
+Kalenjin & 100 & AGVP & Omni2.5-4 & Illuminus & 0 \\
+Kikuyu & 99 & AGVP & Omni2.5-4 & Illuminus & 0 \\
+Mandinka & 88 & AGVP & Omni2.5-8 & Illuminus & 0 \\
+Wolof & 78 & AGVP & Omni2.5-8 & Illuminus & 0 \\
+Sotho & 86 & AGVP & Omni2.5-8 & Illuminus & 0 \\
+Zulu & 95 & AGVP & Omni2.5-4 & Illuminus & 95 \\
+Zulu & 9 & AGVP & Omni2.5-8 & Illuminus & 0 \\
+Amhara & 43 & AGVP & Omni2.5-8 & Illuminus & 24 \\
+Gumuz & 0 & AGVP & Omni2.5-8 & Illuminus & 0 \\
+Oromo & 26 & AGVP & Omni2.5-8 & Illuminus & 19 \\
+Somali & 39 & AGVP & Omni2.5-8 & Illuminus & 20 \\
+Wolayta & 0 & AGVP & Omni2.5-8 & Illuminus & 0 \\
+Egypt & 114 & ADRP & Omni2.5-8 & Illuminus & 97 \\
+Khoe-San (Nama) & 89 & ADRP & Omni2.5-8 & Illuminus & 89 \\
+
+Esan (ESN) & 172 & 1000G & Affy6.0 & - & 99  \\
+
+Gambian (GWD) & 180 & 1000G & Affy6.0 & - & 113  \\
+
+Luhya (LWK) & 116 & 1000G & Omni2.5-8 & - & 99 \\
+Luhya (LWK) & 110 & 1000G & Affy6.0 & - & 97  \\
+
+Mende (MSL) & 122 & 1000G & Affy6.0 & - & 108 \\
+
+Yoruba (YRI) & 189 & 1000G & Omni2.5-8 & - & 108 \\
+Yoruba (YRI) & 182 & 1000G & Affy6.0 & - & 108 \\
+
+Masai (MKK) & 31 & 1000G & Omni2.5-8 & - & 0 \\
+\hline
+Total* & ~6403 & & & & 
+\end{tabular}
+}
+\caption{Sample sets available for creation of a haplotype scaffold to be used for phasing with SHAPEIT2. Sample counts refer to sample counts after quality control. Algorithm refers to the algorithm used to call the chip genotypes. Intersection refers to the count of samples at the intersection between the chip data and the sequence data. Abbreviations are Omni2.5-8 for Illumina HumanOmni2.5-8 BeadChip Kit, Affy6.0 for Affymetrix Genome-Wide Human SNP Array 6.0, AGVP for African Genome Variation Project, 1000G for 1000 Genomes Project. *The 27 and 28 Baganda samples intersecting with the AGVP sequence data are a subset of the 4778 chip genotyped Uganda GPC samples.}
+\label{tab:samples_chip}
+\end{table}

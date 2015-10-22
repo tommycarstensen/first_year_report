@@ -1,10 +1,72 @@
 \chapter{Future work}
-\label{chap:future}
+\label{ch:future}
 
-Future work will involve design of a 1st generation SNP array in collaboration with H3A Africa as described in chapter \ref{chap:adrp}.
+In the immediate future I intend to use the low coverage sequence data from the 5 Africa populations to create a merged reference panel as described in detail in section \ref{sec:refine_and_phase} on page \pageref{sec:refine_and_phase}. We will not use IMPUTE2 to create a merged reference panel from existing haplotypes. Instead we will carry out refinement and phasing from the merged filtered variant calls as described in section \ref{sec:refine_and_phase}, because a larger set of samples will allow more accurate refinement and phasing. The further use of this merged reference panel is described below.
 
-Future work will also involve analysis of genomic location and time of viral introgression, analysis of mutational effects of nsSNPs on protein structures; i.e. changes in binding energies ($\Delta \Delta G_{binding}$), etc.
+In addition to creation and evaluation of the reference panel as described on page we intend to use the data for additional analyses. Specifically we intend to assess the population structure by calculating principal components, doing cluster analysis and utilising other methods. The planned analyses are itemized below.
 
-Find homologous protein structures using \gls{VEP} annotations and search a local \gls{PDB} metadata archive for these annotations. Alternatively I will use a pre-release \gls{PDB} web server, which is in preparation according to private communication with Rachel Kramer Green at the \gls{wwPDB}.
+\begin{itemize}
+ \item Generate reference panel using all populations irrespective of sample size
+ \item Generate basic descriptive summary statistics for each population before and after genotype refinement; e.g. common and rare SNP count.
+ \item Evaluation of imputation accuracy, when using different reference panels and different SNP arrays of comparable size (e.g. designed array, Affymetrix Affy6.0, Illumina HumanOmniExpress, Illumina MEGA array, Illumina Omni2.5), by imputation into populations not constituting the chip and by removal of the given population imputed into from the haplotype reference panel. Imputation accuracy will be evaluated both in terms of correlation and concordance of genotypes as well as fraction of genotypes imputed with a high certainty (e.g. as measured by the IMPUTE2 info score).
+ \item Calculate allelele frequencies and LD patterns
+ \begin{itemize}
+  \item Allele frequency in each population for biologically relevant variants and all other variants
+  \item LD patterns and haplotype lengths within populations
+%  \item Haplotype switch error rates, when SNP array data for trios is available - to infer from phasing with different sample sizes - whether increased sample sizes increase phasing accuracy.
+ \end{itemize}
+ \item Assess population structure
+ \begin{itemize}
+  \item Principal component analysis
+  \item Cluster analysis
+  \item {Fixation index ($F_{ST}$) analysis
+  % http://biopython.org/wiki/PopGen_Genepop
+  % http://vcftools.sourceforge.net/documentation.html#fst
+  % https://www.cog-genomics.org/plink2/basic_stats#fst
+  }
+  \item Calculation of IBD within populations to avoid inclusion of related samples in any LD based calculations (e.g. PCA, imputation).
+  \item Other methods
+ \end{itemize}
+ \item Functional and structural annotation
+  \begin{itemize}
+   \item{VEP annotations}
+   \item{KEGG pathways}
+   \item{Structural interactions within and between proteins
+   %http://www.ensembl.org/info/docs/tools/vep/script/vep_options.html#opt_symbol
+   %http://www.ensembl.org/info/docs/tools/vep/script/vep_options.html#opt_uniprot
+   %http://www.ensembl.org/info/docs/tools/vep/script/vep_options.html#opt_sift
+   %http://www.ensembl.org/info/docs/tools/vep/script/vep_options.html#opt_polyphen
+   %http://www.ensembl.org/info/docs/tools/vep/script/vep_options.html#opt_everything
+   }
+   \item{GERP conservation scores}
+  \end{itemize}
+ \item Novelty and sharing (e.g. $f_2$ variants) between populations
+ \begin{itemize}
+  \item 1000G phase 1 and/or 3; within Africa and globally
+  \item dbSNP138/141+
+  \item AGVP
+  \item SGDP; within Africa and globally
+  \item Joint site frequency spectrums (study outliers)
+ \end{itemize}
+ \item{Determination of Y and MT haplogroups
+ %Supplementary Figure 18 | mtDNA haplogroups in the GoNL samples
+ }
+% \item{Calculate heterozygous chip discordance when calling and refining with different sample sizes to determine whether increased population sizes increase refinement accuracy for African populations}
+ \item {Calculate haplotype switch error rates for populations in which trio SNP array data is available to infer - by phasing with different sample sizes - whether increased sample sizes within and across populations increases phasing accuracy for African populations
+ %Figure S5. Errors in haplotype estimation.
+ }
+% \item{Runs of homozygosity for each population
+ %Supplementary Figure 11 | Runs of homozygosity (ROH) analysis}
+  \item CNV detection for the purpose of inclusion for clinical studies.
+  \item Assessment of demographic history.
+  \item Assessment of mutational burden in Africa.
+  \item Comparison of disease association alleles within Africa and between the continents.
+\end{itemize}
+
+Future work might also involve design of a 1st generation SNP array in collaboration with \gls{H3A} as outlined in chapter \ref{ch:chip_design}, but it is unlikely that time will permit it.
+
+Viral endogenisation has been observed in mammals\cite{Horie2010} and plants\cite{10.1371/journal.ppat.1002146}. My future work will involve analysis of genomic location and time of viral introgression into the DNA of human samples from African populations. The software Kraken\cite{24580807} will be used to identify endogenous viral elements. The dating of the viral endogenisation will be based on the length of haplogroups.
+
+If time permits I would like to do an analysis of mutational effects of nsSNPs on protein structures; i.e. changes in binding energies ($\Delta \Delta G_{binding}$) and synergistic/correlated mutations at interaction sites. I also plan to search for mutations that are compensated for by a homologous protein structure by using \gls{VEP} annotations and searching a local \gls{PDB} metadata archive for these annotations. Alternatively I will use a pre-release \gls{PDB} web server, which is in preparation according to private communication with Rachel Kramer Green at the \gls{wwPDB}. Whole genome sequence data from 2000 Ugandan individuals would provide an excellent data resource for this type of work.
 
 In the past there has been many \gls{GWAS} publications on the identification on association signals, but as the novel discovery rate decreases, then it is not unlikely that we will see a further shift towards structural characterization of variants.\cite{Teng2009}\cite{Kucukkal201518} A structural characterization of variants would provide valuable drug targets for pharmaceutical companies and enable further customisation of drugs based on genotype through structure based drug design.\cite{Kuntz21081992} I want to pursue this, because I believe this is a new strand of public health genomics, which has the potential to have a large positive impact in just a few years from now on public health.

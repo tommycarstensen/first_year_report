@@ -1,17 +1,83 @@
-\subsection{Merging of Datasets}
+\subsubsection{Merging of datasets by recalling prior to refinement and phasing}
 Following curation of individual datasets, these will need to be merged to homogenise variant calls across all data, and generate a non-sparse matrix of variant calls, where the union of variants across all samples is available for each population. This process is similar to the merger of reference panels by imputation (Figure \ref{fig:merging_reference_panels}), which could have been used, if raw reads had not been available for all populations. In order to fill the sparse matrix a union set of calls will be generated for variants that have passed filtering in each dataset (Figure \ref{fig:calling}). Prior to merging we recode any haploid male genotypes (non-PAR X and Y) to homozygous diploid genotypes if necessary. %Prior to merging 1) indels will be left aligned (e.g. bcftools norm) and 2) SNPs and indels called in low coverage data by UnifiedGenotyper will be merged into single records with bcftools (bcftools norm -m +any).
 %and 3) variants called from reads aligned to build 38 will be lifted over to build 37 (liftOver). %http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/liftOver
-Variants will be merged across cohorts (GATK CombineVariants --minimalVCF or bcftools merge | bcftools view -G). These sites will then be recalled in each dataset to generate genotype likelihoods at these sites. Sample NA12878 will not be part of the recalling and NA12878 singletons will not be called.
+Variants will be merged across cohorts (with bcftools merge $|$ bcftools view -G instead of GATK CombineVariants \texttt{--}minimalVCF, because the latter creates multiple records at the same position, but UG in GGA mode only considers the first record).
+%WARN  10:17:31,834 GenotypingGivenAllelesUtils - Multiple valid VCF records detected in the alleles input file at site 20:570945, only considering the first record 
+These sites will then be recalled in each dataset to generate genotype likelihoods at these sites.
+%Sample NA12878 will not be part of the recalling and NA12878 singletons will not be called by exclusion from the union set.
 %Where necessary the union set of sites will be lifted over to build 38 prior to recalling and the recalled variants will then be lifted back over to build 37.
-UG (--genotyping\_mode GENOTYPE\_GIVEN\_ALLELES and --output\_mode EMIT\_ALL\_SITES) will be used for recalling low coverage data.
+\gls{UG} will be used for recalling in GGA mode (\texttt{-{}-}genotyping\_mode GENOTYPE\_GIVEN\_ALLELES and \texttt{--}output\_mode EMIT\_ALL\_SITES).
 %http://gatkforums.broadinstitute.org/discussion/4936/not-all-sites-emitted-with-genotype-given-alleles
-The maximum number of allowed alternate alleles will be increased from the default 6 by multiplication with the number of original cohorts to allow all true variants to be called. Although it should only be necessary for HaplotypeCaller, interval padding will be added to ensure all known sites are called (--interval\_padding 100).
+The maximum number of allowed alternate alleles will be kept at the default 6, since indels are not being called. %Although it should only be necessary for HaplotypeCaller, interval padding will be added to ensure all known sites are called (--interval\_padding 100). %Not necessary for UG.
 %http://gatkforums.broadinstitute.org/discussion/comment/18353
-Following this, genotype refinement will be carried out.
+Following this, genotype refinement will be carried out, because we have shown refinement to improve genotype likelihoods for especially rare variants for low coverage data\cite{Gurdasani2015}.
 
-\begin{figure}[!htbp]
+\begin{figure}[htbp]
 \centering
 \includegraphics[width=0.6\textwidth]{merging_reference_panels}
 \caption{The principle of creating a non-sparse matrix is the same as the merger of reference panels by imputation software. Figure copied from \href{http://mathgen.stats.ox.ac.uk/impute/merging\_reference\_panels.png}{IMPUTE2 web site}.}
 \label{fig:merging_reference_panels}
 \end{figure}
+
+The detailed work flow is:
+\begin{enumerate}
+\item{Create \texttt{-{}-}alleles input files for the recalling with \gls{GATK} \gls{UG} run with \texttt{-{}-}genotyping\_mode GENOTYPE\_GIVEN\_ALLELES.}
+
+\begin{enumerate}
+
+\item{Split multiallelic variants into biallelic variants using bcftools norm (-m -) and left align indels (-f) to enable comparison of individual alternate alleles at multiallelic sites by bcftools isec.}
+
+\item{Filter out complex variants from the dataset and 1000Gp3 calls using bcftools view (-v snps).}
+
+\item{Find the union set of sites in the ADRP and 1000Gp3 calls using bcftools isec (-n+1).}
+
+\item{Merge multiallelic sites into one VCF record with bcftools norm (-m +any) to avoid GATK UG only considering the first record.}
+
+\end{enumerate}
+
+\item{Run \gls{GATK} \gls{UG} with \texttt{--}genotyping\_mode GENOTYPE\_GIVEN\_ALLELES across all samples of both datasets.}
+
+%2nd VR because either false sites, false genotypes or UG fail.
+\item{Because we found the 1000G samples to cluster together in a PCA plot \ref{fig:PCAprepostVR} we ran another round of \gls{VR} after the joint calling of the union set. We applied a truth sensitivity threshold of 99.5\% after plotting the sensitivity and false discovery rate as a function of VQSLOD scores
+%(figure \ref{ROC2}).
+. Prior to the second round of \gls{VR} we also exclude variants with a non-reference allele count of 0 (table \ref{tab:SNPcount}), which could be due to a different genotype being called for rare variants during the joint calling of the union set or the variant being called in 1000G by a method involving local realignment, which is not part of \gls{GATK} \gls{UG}. Many of these variants are singletons, which were also excluded as part of the UK10K efforts to generate a merged reference panel.\cite{2015Huang}}
+
+\item{Exclusion of samples in each population with a heterozygosity deviating more than 3.5 standard deviations from the mean for each population (table \ref{tab:samplecount}).}
+
+\item{Refinement with Beagle4 and phasing with SHAPEIT2 as described in section \ref{sec:refine_and_phase}.}
+
+\end{enumerate}
+
+\begin{figure}[h]
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=1.0\linewidth]{ADRP/figures/PC12_africa_noVR.png}
+  \caption{}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=1.0\linewidth]{ADRP/figures/PC12_africa}
+  \caption{}
+\end{subfigure}%
+\caption{Plots of principal components 1 and 2 for 3055 African samples prior to refinement without (a) and with (b) a 2nd round of \gls{VR}. The LWK samples from East Africa can be seen to cluster with the 4 1000G populations from West Africa, if a 2nd round of \gls{VR} is not carried out, which filters out approximately 10 million variants.}
+\label{fig:PCAprepostVR}
+\end{figure}
+
+The sample count after each step of the curation process is summarised in table \ref{tab:samplecount}.
+
+The SNP count after merger with 1000G and re-calling of the union set of sites jointly across all samples is summarised in table \ref{tab:SNPcount}.
+
+Prior to refinement we check the correlation with chip data (table \ref{tab:correlation_prerefinement} and figure \ref{fig:correlation_prerefinement})
+
+\input{ADRP/tables/curation_correlation_prerefinement}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{correlation_prerefinement}
+    \caption{Correlation between Omni2.5 chip data and SNP calls prior to refinement.}
+    \label{fig:correlation_prerefinement}
+\end{figure}
+
+\input{ADRP/tables/curation_sample_count}
+
+\input{ADRP/tables/curation_SNP_count}

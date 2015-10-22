@@ -1,6 +1,6 @@
-\subsection{Results}
+\section{Results}
 
-\subsubsection{Data description after QC}
+\subsection{Data description after QC}
 \label{sec:agv_data_description}
 Related and unrelated male and female samples from 3 different African populations (table \ref{tab:short_summary}) were genotyped using the Illumina HumanOmni2.5 genotype chip array and sequenced on an Illumina HiSeq 2000 to different depths of coverage (table \ref{tab:samples}) and subsequently downsampled to a similar coverage of 4x (figure \ref{fig:coverage}). The \gls{QC} of the samples genotyped on the Illumina HumanOmni2.5-4 and 2.5-8 platforms is described elsewhere\cite{Gurdasani2015} and on page \pageref{subsec:chipQC}.
 \input{tab/samples}
@@ -13,7 +13,7 @@ The majority of the sequenced \glspl{SNP} are already present in phase 1 of \gls
 %\subsubsection{Comparison of variant calling software}
 %\subsubsection{Comparison of refinement software and reference panels}
 
-\subsubsection{Data description after downsampling}
+\subsection{Data description after downsampling}
 
 As the coverage drops the ability to call rare \glspl{SNP} decreases (figure \ref{fig:downsampling_SNP_count} and table\ref{tab:downsampling_omni_intersection}). At lower coverage the genotype correlation between the calls from the SNP array and sequencing platforms is also reduced and especially for rare variants (figure \ref{fig:SN12f5}).
 \input{fig/SN12f5}
@@ -22,14 +22,14 @@ As the coverage drops the ability to call rare \glspl{SNP} decreases (figure \re
 \input{fig/intersection}
 \input{tab/downsampling_omni_intersection}
 
-\subsubsection{Comparison of whole genome sequencing and SNP array designs}
+\subsection{Comparison of whole genome sequencing and SNP array designs}
 
 \input{fig/SN12f2}
 \input{fig/SN12f3}
 \input{fig/SN12f4}
 \input{fig/SN12f5}
 
-\subsubsection{Apparent sample size}
+\subsection{Apparent sample size}
 By using the costs in table \ref{tab:costs} and equation \ref{eq:apparent_sample_size} we calculated the apparent sample size for different study designs at a fixed cost. When not taking into consideration computational costs the ultra low coverage study design is a good choice for capturing common variation at a low cost.
 
 \input{fig/SN12f6} % apparent sample size

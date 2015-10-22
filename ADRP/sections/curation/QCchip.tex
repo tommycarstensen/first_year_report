@@ -1,3 +1,10 @@
-\subsection{Quality control of SNP array data}
+\subsubsection{Quality control of SNP array data}
+\label{sec:QCchip}
 %TODO: generate .miss and .multiple from Illumina files and flip according to reference sequence.
-The SNP array data to be used for the haplotype scaffold has to undergo quality control. In this section we describe this QC procedure.
+We will use SNP array data to generate a haplotype scaffold to assist in phasing of the refined sequence data derived genotypes. The SNP array data to be used for the haplotype scaffold has to undergo quality control. Some of the data has already undergone QC as part of the AGVP\cite{Gurdasani2015} and 1000G\cite{1000G2012}. Haplotype scaffolds are already publicly available for the 1000G populations. For the remaining new datasets we apply the same QC protocol that was used for the AGVP. We apply the QC individually to each population.
+
+Low quality variants that map to multiple regions within the human genome or don't map to any region are removed. Duplicate variants genotyped on the chip are also excluded during filtering. We allow variants, which are not at the intersection between different platforms.
+
+Samples with a call rate below 98\% and a heterozygosity greater than 3 SD from the mean are filtered sequentially. Sex check is carried out on the chromosome X SNPs with PLINK1.07 using default F values of \textless0.2 for males \textgreater0.8 for females. Samples not meeting the thresholds are removed. Following this SNP filtering is carried out across the remaning samples, and sites called in less than 98\% of samples are removed from each population. Sites not in Hardy Weinberg equilibrium ($p<10^{-7}$) will also be removed from each population. Identity by descent (IBD) is measured within each population and related individuals (IBD\textgreater0.05) are removed using an algorithm that retains the maximum number of indviduals by removing individuals related to the largest number in the dataset iteratively. For individuals related to equal numbers in the dataset, samples with lower call rates are preferentially removed.
+
+Following the above QC process, principal component analysis i carried with EIGENSOFT5.0 for each population to inspect the data for outliers.

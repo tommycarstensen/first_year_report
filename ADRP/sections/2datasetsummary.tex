@@ -1,21 +1,27 @@
-\section{Summary of Datasets}
-The chip design will incorporate several population groups collated from different parts of Africa. These include samples collated as part of the AGVP\cite{Gurdasani2015}, the 1000 Genomes project (\href{http://www.1000genomes.org}{http://www.1000genomes.org}),
+\subsection{Summary of Datasets}
+The project will incorporate datasets from several population groups collated from different parts of Africa. These include samples collated as part of the AGVP\cite{Gurdasani2015}, (\href{http://www.1000genomes.org}{the 1000 Genomes project})\cite{1000G2012},
 % the Genome Diversity in Africa Project (GDAP),
 % the Simon’s Foundation (\href{http://www.simonsfoundation.org/life-sciences/simons-genome-diversity-project-dataset/}{http://www.simonsfoundation.org/life-sciences/simons-genome-diversity-project-dataset/}),
- and other shared or publicly available data. These samples have been chosen to be representative of diverse ethnolinguistic and geographical groups across Africa. All samples will constitute the reference panel described in the tag SNP selection section, but tag SNPs will only be selected from populations with 50 samples or more. The chip efficiency will be validated with the remaining populations.
-
-\begin{figure}[h]
-\begin{subfigure}{.5\textwidth}
+ and other shared or publicly available data (figure \ref{fig:map} and table \ref{tab:samples}). These samples have been chosen to be representative of diverse ethnolinguistic and geographical groups across Africa. The imputation accuracy of the reference panel will be evaluated using other populations; e.g. Zulu samples.
+ 
+ As part of the data curation process available SNP array data (table \ref{tab:samples_chip}) will be used for validation of sequenced samples and for generation of a haplotype scaffold for phasing as described on page \pageref{sec:refine_and_phase}.
+ 
+\begin{figure}[htbp]
+\centering
+ \begin{subfigure}[b]{0.9\textwidth}
   \centering
-  \includegraphics[width=1.0\linewidth]{Africa.jpg}
-  \caption{African continent.}
-\end{subfigure}%
-\begin{subfigure}{.5\textwidth}
+%  \includegraphics[width=1.0\linewidth]{ADRP_Africa_2015-03-23.jpg}
+  \includegraphics[width=0.9\linewidth]{ADRP/figures/Africa} \caption{Population groups on the African continent comprising the reference panel.}
+ \end{subfigure}
+ \begin{subfigure}[b]{0.9\textwidth}
   \centering
-  \includegraphics[width=1.0\linewidth]{Uganda.jpg}
+  \includegraphics[width=0.9\linewidth]{ADRP/figures/Uganda.jpg}
   \caption{Southern Uganda south of the tripoint between Northern, Western and Eastern Africa.}
-\end{subfigure}%
+ \end{subfigure}
 \caption{Maps showing sample location, sample count and sequencing depth of data to be included.}
+\label{fig:map}
 \end{figure}
 
-\input{tables/samples}
+\input{ADRP/tables/samples}
+
+\input{ADRP/tables/samples_chip}
