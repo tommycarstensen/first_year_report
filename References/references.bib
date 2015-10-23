@@ -1,3 +1,29 @@
+@Article{25722852,
+AUTHOR = {Chang, Christopher and Chow, Carson and Tellier, Laurent and Vattikuti, Shashaank and Purcell, Shaun and Lee, James},
+TITLE = {Second-generation PLINK: rising to the challenge of larger and richer datasets},
+JOURNAL = {GigaScience},
+VOLUME = {4},
+YEAR = {2015},
+NUMBER = {1},
+PAGES = {7},
+URL = {http://www.gigasciencejournal.com/content/4/1/7},
+DOI = {10.1186/s13742-015-0047-8},
+PubMedID = {25722852},
+ISSN = {2047-217X},
+ABSTRACT = {BACKGROUND:PLINK 1 is a widely used open-source C/C++ toolset for genome-wide association studies (GWAS) and research in population genetics. However, the steady accumulation of data from imputation and whole-genome sequencing studies has exposed a strong need for faster and scalable implementations of key functions, such as logistic regression, linkage disequilibrium estimation, and genomic distance evaluation. In addition, GWAS and population-genetic data now frequently contain genotype likelihoods, phase information, and/or multiallelic variants, none of which can be represented by PLINK 1's primary data format.FINDINGS:To address these issues, we are developing a second-generation codebase for PLINK. The first major release from this codebase, PLINK 1.9, introduces extensive use of bit-level parallelism, On-time/constant-space Hardy-Weinberg equilibrium and Fisher's exact tests, and many other algorithmic improvements. In combination, these changes accelerate most operations by 1-4 orders of magnitude, and allow the program to handle datasets too large to fit in RAM. We have also developed an extension to the data format which adds low-overhead support for genotype likelihoods, phase, multiallelic variants, and reference vs. alternate alleles, which is the basis of our planned second release (PLINK 2.0).CONCLUSIONS:The second-generation versions of PLINK will offer dramatic improvements in performance and compatibility. For the first time, users without access to high-end computing resources can perform several essential analyses of the feature-rich and very large genetic datasets coming into use.},
+}
+
+@article{Li05012011,
+author = {Li, Heng}, 
+title = {Tabix: Fast retrieval of sequence features from generic TAB-delimited files},
+year = {2011}, 
+doi = {10.1093/bioinformatics/btq671}, 
+abstract ={Summary: Tabix is the first generic tool that indexes position sorted files in TAB-delimited formats such as GFF, BED, PSL, SAM and SQL export, and quickly retrieves features overlapping specified regions. Tabix features include few seek function calls per query, data compression with gzip compatibility and direct FTP/HTTP access. Tabix is implemented as a free command line tool as well as a library in C, Java, Perl and Python. It is particularly useful for manually examining local genomic features on the command line and enables genome viewers to support huge data files and remote custom tracks over networks.Availability and Implementation: http://samtools.sourceforge.netContact: hengli@broadinstitute.org}, 
+URL = {http://bioinformatics.oxfordjournals.org/content/early/2011/01/05/bioinformatics.btq671.abstract}, 
+eprint = {http://bioinformatics.oxfordjournals.org/content/early/2011/01/05/bioinformatics.btq671.full.pdf+html}, 
+journal = {Bioinformatics} 
+}
+
 @article{1000G2015,
 	Abstract = {The 1000 Genomes Project set out to provide a comprehensive description of common human genetic variation by applying whole-genome sequencing to a diverse set of individuals from multiple populations. Here we report completion of the project, having reconstructed the genomes of 2,504 individuals from 26 populations using a combination of low-coverage whole-genome sequencing, deep exome sequencing, and dense microarray genotyping. We characterized a broad spectrum of genetic variation, in total over 88 million variants (84.7 million single nucleotide polymorphisms (SNPs), 3.6 million short insertions/deletions (indels), and 60,000 structural variants), all phased onto high-quality haplotypes. This resource includes >99{\%} of SNP variants with a frequency of >1{\%} for a variety of ancestries. We describe the distribution of genetic variation across the global sample, and discuss the implications for common disease studies.},
 	Author = {The 1000 Genomes Project Consortium},

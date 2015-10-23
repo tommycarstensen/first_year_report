@@ -1,6 +1,7 @@
 \chapter{Future work}
 \label{ch:future}
 
+\section{African Diversity Reference Panel}
 In the immediate future I intend to use the low coverage sequence data from the 5 Africa populations to create a merged reference panel as described in detail in section \ref{sec:refine_and_phase} on page \pageref{sec:refine_and_phase}. We will not use IMPUTE2 to create a merged reference panel from existing haplotypes. Instead we will carry out refinement and phasing from the merged filtered variant calls as described in section \ref{sec:refine_and_phase}, because a larger set of samples will allow more accurate refinement and phasing. The further use of this merged reference panel is described below.
 
 In addition to creation and evaluation of the reference panel as described on page we intend to use the data for additional analyses. Specifically we intend to assess the population structure by calculating principal components, doing cluster analysis and utilising other methods. The planned analyses are itemized below.
@@ -63,10 +64,13 @@ In addition to creation and evaluation of the reference panel as described on pa
   \item Comparison of disease association alleles within Africa and between the continents.
 \end{itemize}
 
+\section{African SNP array}
 Future work might also involve design of a 1st generation SNP array in collaboration with \gls{H3A} as outlined in chapter \ref{ch:chip_design}, but it is unlikely that time will permit it.
 
+\section{Viral endogenisation}
 Viral endogenisation has been observed in mammals\cite{Horie2010} and plants\cite{10.1371/journal.ppat.1002146}. My future work will involve analysis of genomic location and time of viral introgression into the DNA of human samples from African populations. The software Kraken\cite{24580807} will be used to identify endogenous viral elements. The dating of the viral endogenisation will be based on the length of haplogroups.
 
+\section{\glspl{nsSNP} and \glspl{PPI} and homologous genes}
 If time permits I would like to do an analysis of mutational effects of nsSNPs on protein structures; i.e. changes in binding energies ($\Delta \Delta G_{binding}$) and synergistic/correlated mutations at interaction sites. I also plan to search for mutations that are compensated for by a homologous protein structure by using \gls{VEP} annotations and searching a local \gls{PDB} metadata archive for these annotations. Alternatively I will use a pre-release \gls{PDB} web server, which is in preparation according to private communication with Rachel Kramer Green at the \gls{wwPDB}. Whole genome sequence data from 2000 Ugandan individuals would provide an excellent data resource for this type of work.
 
 In the past there has been many \gls{GWAS} publications on the identification on association signals, but as the novel discovery rate decreases, then it is not unlikely that we will see a further shift towards structural characterization of variants.\cite{Teng2009}\cite{Kucukkal201518} A structural characterization of variants would provide valuable drug targets for pharmaceutical companies and enable further customisation of drugs based on genotype through structure based drug design.\cite{Kuntz21081992} I want to pursue this, because I believe this is a new strand of public health genomics, which has the potential to have a large positive impact in just a few years from now on public health.

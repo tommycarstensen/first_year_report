@@ -15,7 +15,7 @@ Following this, genotype refinement will be carried out, because we have shown r
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.6\textwidth]{merging_reference_panels}
-\caption{The principle of creating a non-sparse matrix is the same as the merger of reference panels by imputation software. Figure copied from \href{http://mathgen.stats.ox.ac.uk/impute/merging\_reference\_panels.png}{IMPUTE2 web site}.}
+\caption[Illustration of the principle of creation of a non-sparse matrix of SNPs across all samples.]{The principle of creating a non-sparse matrix is the same as the merger of reference panels by imputation software. Figure copied from \href{http://mathgen.stats.ox.ac.uk/impute/merging\_reference\_panels.png}{IMPUTE2 web site}.}
 \label{fig:merging_reference_panels}
 \end{figure}
 
@@ -59,7 +59,7 @@ The detailed work flow is:
   \includegraphics[width=1.0\linewidth]{ADRP/figures/PC12_africa}
   \caption{}
 \end{subfigure}%
-\caption{Plots of principal components 1 and 2 for 3055 African samples prior to refinement without (a) and with (b) a 2nd round of \gls{VR}. The LWK samples from East Africa can be seen to cluster with the 4 1000G populations from West Africa, if a 2nd round of \gls{VR} is not carried out, which filters out approximately 10 million variants.}
+\caption[\gls{PCA} plot of 10 African populations.]{Plots of principal components 1 and 2 for 3055 African samples prior to refinement without (a) and with (b) a 2nd round of \gls{VR}. The \gls{LWK} samples from East Africa can be seen to cluster with the 4 \gls{1000G} populations from West Africa, if a 2nd round of \gls{VR} is not carried out, which filters out approximately 10 million variants.}
 \label{fig:PCAprepostVR}
 \end{figure}
 
@@ -74,7 +74,7 @@ Prior to refinement we check the correlation with chip data (table \ref{tab:corr
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.8\textwidth]{correlation_prerefinement}
-    \caption{Correlation between Omni2.5 chip data and SNP calls prior to refinement.}
+    \caption{Correlation between Omni2.5 chip data and SNP calls prior to refinement as a function of \gls{MAF}.}
     \label{fig:correlation_prerefinement}
 \end{figure}
 

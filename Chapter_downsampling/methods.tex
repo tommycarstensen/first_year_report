@@ -8,12 +8,6 @@ The populations were genotyped on either the Illumina HumanOmni2.5-4 (quad) or -
 \input{tab/chips_preQC_summary}
 \input{tab/chip_sample_summary}
 
-A flow diagram illustrating the variant calling process is shown in figure \ref{fig:SN12f2}.
-\input{fig/SN09f1}
-
-A flow diagram explaining the curation of \gls{WGS} data down-sampled to lower coverage and the comparison with \gls{WGS} data at higher coverage and imputed SNP array data is shown in figure \ref{fig:SN12f1}.
-\input{fig/SN12f1}
-
 The \gls{QC} was carried out with PLINK\cite{Purcell2007}, Python 3\footnote{\url{https://www.python.org}} and the GNU core utilities\footnote{\url{https://www.gnu.org/software/coreutils}}. We removed samples without proper consent prior to genotype calling. Genotype calling was carried out with the Illuminus algorithm at the \gls{WTSI}. Three sets were called independently; i.e. 4892 Ugandan samples on the octo platform and additional African samples on the quad and octo platforms (see supplementary table 3 of the AGV project publication\cite{Gurdasani2015}). Prior to the \gls{QC} we updated genders for samples with genotype gender issues as determined by PLINK in accordance with new data collection of genders. The QC was slightly different for the 5000 Ugandan samples of which approximately two thirds were Baganda. Specifically we used a lower \gls{HWE} probability threshold of $10^{-8}$ instead of a lower threshold of $10^{-6}$. This was because the Ugandan samples were highly related and we expected more deviations from \gls{HWE}. For the same reason we applied an IBD threshold of 0.9 instead of 0.05. We used sample and SNP call proportions of 0.97 instead of 0.98 for the Ugandan samples. We also expect the genotype calls to be better for larger sample sizes, which would allow for a more stringent QC, but we never evaluated this. The QC for the two other main datasets, which was carried out per population and per platform, is described in the following paragraphs.
 
 \paragraph{Harmonisation of .strand files}
@@ -42,16 +36,28 @@ The data was split by population and platform (i.e. quad and octo) and \gls{QC} 
 \item \gls{HWE} (\textit{p}$_{HWE}$<10$^{-6}$) on all autosomal SNPs and female X chromosome SNPs.
 \end{enumerate}
 
-\subsection{Sequencing}
+\subsection{Curation of original and down-sampled sequence data}
+A flow diagram illustrating the variant calling process is shown in figure \ref{fig:SN12f2}.
+\input{fig/SN09f1}
+\input{fig/SN12f2}
+
+The data curation process after sequencing involves mapping of reads to the reference genome, \gls{BAM} file pre-processing, variant calling, variant filtering, genotype likelihood refinement and phasing to obtain haplotypes.
+
+The data is also down-sampled to lower coverage prior to \gls{BAM} file pre-processing for the purpose of identifying the most cost effective study design.
+
+A flow diagram explaining the curation of \gls{WGS} data down-sampled to lower coverage and the comparison with \gls{WGS} data at higher coverage and imputed SNP array data is shown in figure \ref{fig:SN12f1}.
+\input{fig/SN12f1}
+
+\subsubsection{Sequencing}
 \label{subsec:sequence}
 Sequence data for the same SNP array genotyped populations was also generated (table \ref{tab:sequence_sample_summary}). Blood samples were collected by local collaborators. Library preparation and sequencing on Illumina HiSeq2000 machines were carried out at the \gls{WTSI} by \gls{HGI}.
 
 \input{tab/sequence_sample_summary}
 
-\subsection{QC of raw reads}
+\subsubsection{QC of raw reads}
 In order to ensure the quality of the raw reads produced for the project, an automatic \gls{QC} system was employed by \gls{HGI} at the \gls{WTSI} to reduce the number of data files that required manual intervention. This system was been derived from the one originally designed for the UK10K project and uses a series of empirically derived thresholds to assess summary metrics calculated from the input \glspl{BAM}. These thresholds include: percentage of reads mapped; percentage of duplicate reads marked; various statistics measuring indel distribution against read cycle and an insert size overlap percentage. Any lanes that fell below the "fail" threshold for any of the metrics were excluded; any lanes that fell below the "warn" threshold on a metric were manually examined; and any lane that did not fall below either of these thresholds for any of the metrics was given a status of "pass" and allowed to proceed into the later stages of the pipeline.
 
-\subsection{Downsampling}
+\subsubsection{Downsampling}
 Downsampling to a lower coverage was carried out to enable comparison of ultra low coverage study designs with low coverage and SNP array study designs. Samples were downsampled to average coverages of 8x, 4x, 2x, 1x and 0.5x. Downsampling was carried out on the raw reads converted to lanelet bam files prior to pre-processing to best simulate a real case scenario. Instead of downsampling by unit fractions\cite{10.1371/journal.pcbi.1002604}, downsampling was carried out to achieve a specific integer value coverage across all samples in a given population. The downsampling fraction (equation \ref{eq:downsampling}) was calculated from the initial coverage across all samples, which was calculated from the number of mapped reads, which was counted with samtools\cite{Li15082009} flagstat. The read length on the Illumina HiSeq2000 is 100. We divided by the number of non N bases in the reference genome (2.85\gls{Gbp}) to which reads can be mapped.
 
 \begin{equation}
@@ -65,7 +71,7 @@ Downsampling to a lower coverage was carried out with \gls{GATK}Lite2.1 PrintRea
 %Avoiding read mapping bias was not ensured by sorting the reads by read name before downsampling and resorting the downsampled reads by coordinate.
 After down-sampling the reads were realigned and recalibrated as described in the next section.
 
-\subsection{Pre-processing of raw reads}
+\subsubsection{Pre-processing of raw reads}
 We carried out downsampling of the raw reads to a lower coverage prior to pre-processing. The following pre-processing steps for the 100bp length reads stored in .bam files was carried out in sequence:
 \begin{enumerate}
 \item Marking of duplicates on a lanelet level with Picard MarkDuplicates.
@@ -80,7 +86,7 @@ We carried out downsampling of the raw reads to a lower coverage prior to pre-pr
 We mark duplicates for exclusion, because sequencing errors are otherwise propagated in duplicates leading to false positive variant calls. Base quality doesn't have any impact on indel realignment, but having reads realigned properly improves the base recalibration model, because it reduces the number of artifactual \glspl{SNP}. It supposedly improves accuracy of downstream processing steps. This assumption was never tested.
 %Recommendations here: https://www.broadinstitute.org/gatk/guide/article?id=1247
 
-\subsection{Variant Calling}
+\subsubsection{Variant Calling}
 We evaluated different variant calling software packages. We decided to use \gls{GATK} \gls{UG}. It has an ability to call more \glspl{SNP} with a quality above 4 than any other variant caller (figure \ref{fig:venn4_varcall_Platypus_filter_QUAL4_incl_MNPs_TiTv}). We did not evaluate whether all of the called variants were true positives, but we did take note of the variants unique to \gls{UG} having a relatively high \gls{TiTv} ratio, which indicates that the variants could be true positives. Furthermore the variants were counted prior to filtering, which would further filter out false positives. Hence a high sensitivity at this stage is preferable. If more time had been available, then we would have calculated the sensitivity and specificity for each variant caller by comparison to a truth set. We would also have evaluated indel calling abilities.
 
 \input{fig/venn4_varcall_Platypus_filter_QUAL4_incl_MNPs_TiTv}
@@ -100,7 +106,7 @@ number of samples we changed the default Phred quality score threshold at which 
 \item BadMateFilter to filter out reads whose mate maps to a different contig.
 \end{itemize}
 
-\subsection{Variant Filtering}
+\subsubsection{Variant Filtering}
 The Gaussian mixture model of \gls{GATK} \gls{VR} was used for filtering called variants. The machine learning method was run simultaneously across all autosomes. The filtering is based on a \gls{VQSLOD} score, which is the log odds ratio of being a true variant versus being false under the trained Gaussian mixture model. The annotations we used for the model were
 \begin{itemize}
 \item Total depth over all samples (Coverage in versions prior to 2.4)
@@ -122,7 +128,7 @@ After deciding on the best variant calling approach we wanted to decide on an op
 
 For the final variant calling prior to the generation of the reference panel and simulation of the SNP array we did not include the samples NA12878 and NA19240 in the joint variant calling. This was to avoid bias in annotations used for filtering and to avoid inclusion of variants unique to either or both of the two samples.
 
-\subsection{Genotype probability refinement}
+\subsubsection{Genotype probability refinement}
 \label{subsec:AGVrefinement}
 We carried out refinement and imputation with version 3.3.2 of Beagle.\cite{Browning20071084} We chose to carry out imputation with \gls{1000G} phase 1 as a reference panel, because of the small samples size. Using a reference panel was shown to improve imputation accuracy (figure \ref{fig:SN09f3}, which was calculated by comparison with SNP array genotypes using Python.\footnote{https://github.com/team149/tc9/tree/master/comparison/correlation.py}
 \input{fig/SN09f3}
@@ -140,7 +146,7 @@ Ultimately we decided that imputation with Beagle3\cite{Browning20071084} using 
 We used an interval size of 2\gls{Mbp} for imputation. Fragments with few variants near centromeres and telomeres and in sparse regions were avoided by not allowing intervals to extend across centromeres and by extension of intervals until containing at least 400\gls{kbp} and 1000 variants. With the exception of fragments next to telomeres and large centromeres, an additional 150\gls{kbp} was included on either side of each fragment to avoid side effects. These fragment edges were not used for any downstream analysis.
 We carried out refinement of existing genotype probabilities and inferred missing variants simultaneously despite both the reduced \gls{1000G} phase 1 reference panel and the set of called variants having more than 7\% missing alleles relative to one another. This causes a warning message to appear, but it does not make the refinement inferior and necessitate imputation to be carried out twice; once within the population for novel variants and once with the reference panel for known variants.
 
-\subsection{Post-refinement \gls{QC}}
+\subsubsection{Post-refinement \gls{QC}}
 We checked for heterozygosity and \gls{PCA} outliers after refinement, but did not exclude additional samples. Heterozygosity was calculated with GNU Awk\footnote{\url{http://www.gnu.org/software/gawk/manual/gawk.html}} and principal components with Eigensoft4.2\cite{10.1371/journal.pgen.0020190}\cite{Price2006}
 
 \subsection{Correlation}
