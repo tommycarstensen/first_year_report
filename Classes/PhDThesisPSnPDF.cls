@@ -15,8 +15,7 @@
 \newcommand\fileversion{1.4.2}
 \newcommand\filedate{2014/10/08}
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{PhDThesisPSnPDF}[\filedate\space A PhD thesis class file
- by Krishna Kumar (v\fileversion)]
+\ProvidesClass{PhDThesisPSnPDF}[\filedate\space A PhD thesis class file (v\fileversion)]
 \typeout{https://github.com/kks32/phd-thesis-template/}
 
 
