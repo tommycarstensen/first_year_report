@@ -2,6 +2,8 @@
 
 SNP array data from the Omni2.5 platform and sequence data from the HiSeq2000 platform was processed with PLINK v1.07\cite{Purcell2007} and \gls{GATK} v2.1 respectively unless otherwise noted. On page \pageref{subsec:chipQC} I describe the QC process for the SNP array data. On page \pageref{subsec:sequence} I describe the down sampling and the data curation of the sequencing data. On page \pageref{subsec:samplesize} I describe how we calculate an effective sample size at a fixed budget for each experimental method.
 
+
+
 \subsection{SNP array QC}
 \label{subsec:chipQC}
 
@@ -9,9 +11,9 @@ The populations were genotyped on either the Illumina HumanOmni2.5-4 (quad) or -
 \input{tab/chips_preQC_summary}
 \input{tab/chip_sample_summary}
 
-The \gls{QC} was carried out with PLINK 1.07\cite{Purcell2007}, Python 3\footnote{\url{https://www.python.org}} and the GNU core utilities\footnote{\url{https://www.gnu.org/software/coreutils}}. We removed samples without proper consent prior to genotype calling. Genotype calling was carried out with the Illuminus algorithm at the \gls{WTSI}. Three sets were called independently; i.e. 4892 Ugandan samples on the octo platform and additional African samples on the quad and octo platforms (see supplementary table 3 on page 5 of the supplementary material of the \gls{AGV} project publication\cite{Gurdasani2015}). Prior to the \gls{QC} we updated genders for samples with genotype gender issues as determined by PLINK in accordance with new data collection of genders. The QC was slightly different for the 5000 Ugandan samples of which approximately two thirds were Baganda. Specifically we used a lower \gls{HWE} probability threshold of $10^{-8}$ instead of a lower threshold of $10^{-6}$. This was because the Ugandan samples were highly related and we expected more deviations from \gls{HWE}. For the same reason we applied an \gls{IBD} threshold of 0.9 instead of 0.05. We used sample and \gls{SNP} call proportions of 0.97 instead of 0.98 for the Ugandan samples. We also expect the genotype calls to be better for larger sample sizes, which would allow for a more stringent \gls{QC}, but we never evaluated this. The \gls{QC} for the two other main datasets, which was carried out per population and per platform, is described in the following paragraphs. The \gls{QC} of the Uganda \gls{GWAS} data set is described in the appendix on page \pageref{app:qc_uganda_gwas}.
+The \gls{QC} was carried out with PLINK 1.07\cite{Purcell2007}, Python 3\footnote{\url{https://www.python.org}} and the GNU core utilities\footnote{\url{https://www.gnu.org/software/coreutils}}. We removed samples without proper consent prior to genotype calling. Genotype calling was carried out with the Illuminus algorithm at the \gls{WTSI}. Three sets were called independently; i.e. 4892 Ugandan samples on the octo platform and additional African samples on the quad and octo platforms (see supplementary table 3 on page 5 of the supplementary material of the \gls{AGV} project publication\cite{Gurdasani2015}). Prior to the \gls{QC} we updated genders for samples with genotype gender issues as determined by PLINK in accordance with new data collection of genders. The QC was slightly different for the 5000 Ugandan samples (appendix \ref{app:qc_uganda_gwas}) of which approximately two thirds were Baganda. Specifically we used a lower \gls{HWE} probability threshold of $10^{-8}$ instead of a lower threshold of $10^{-6}$. This was because the Ugandan samples were highly related and we expected more deviations from \gls{HWE}. For the same reason we applied an \gls{IBD} threshold of 0.9 instead of 0.05. We used sample and \gls{SNP} call proportions of 0.97 instead of 0.98 for the Ugandan samples. We also expect the genotype calls to be better for larger sample sizes, which would allow for a more stringent \gls{QC}, but we never evaluated this. The \gls{QC} for the two other main datasets, which was carried out per population and per platform, is described in the following sub sections. The \gls{QC} of the Uganda \gls{GWAS} data set is described in the appendix on page \pageref{app:qc_uganda_gwas}.
 
-\paragraph{Harmonisation of .strand files}
+\subsubsection{Harmonisation of .strand files}
 The .strand file contains information on how to flip alleles from Illumina TOP alleles to the forward strand. The purpose of the harmonisation of the .strand files is to obtain a single clean strand file containing only SNPs common to both original strand files. A summary of the original .strand files is given in table \ref{tab:strand_files}.
 \input{tab/strand_files}
 
@@ -21,12 +23,12 @@ After updating the build and removing \glspl{SNP} in the .miss and .multiple fil
 Afterwards we excluded \glspl{SNP} not present in both .strand files; i.e. we required the coordinate and the alleles to be identical. The SNP exclusion from the strand files is summarized in table \ref{tab:strand_file_exclusion_summary}.
 \input{tab/strand_file_exclusion_summary}
 
-\paragraph{Harmonisation of data (.bim and .bed) files}
+\subsubsection{Harmonisation of data (.bim and .bed) files}
 From the quad and octo \gls{SNP} array genotype data we removed rsIDs not present in the processed strand files. For the quad it was necessary to use the harmonized strand file with the original quad nomenclature as doing otherwise would create duplicate rsIDs. We updated the quad positions and rsIDs. SNPs that failed to be remapped were excluded. After updating the quad rsIDs we flipped the quad and octo \glspl{SNP} to the forward strand according to the processed .strand files. Finally we extracted \glspl{SNP} common between .strand and .bim files and common between the quad and octo .bim files. The SNP exclusion from the genotype data files is summarized in table \ref{tab:bim_file_exclusion_summary}.
 \input{tab/bim_file_exclusion_summary}
 
-\paragraph{QC steps after harmonisation of files}
-The data was split by population and platform (i.e. quad and octo) and \gls{QC} was carried out for individual data sets. The \gls{QC} that was carried out for each population is described elsewhere.\cite{Gurdasani2015} All steps except heterozygosity calculations and IBD sample pruning were carried out with PLINK; heterozygosity calculations are erroneous for PLINK and PLINK cannot do \gls{IBD} sample pruning. Instead we used Python for these tasks.\footnote{\url{https://github.com/team149/tc9/blob/master/QC/QC_IBD_prune.py}} In summary the QC consisted of sequential checks of
+\subsubsection{QC steps after harmonisation of files}
+The data was split by population and platform (i.e. quad and octo) and \gls{QC} was carried out for individual data sets. The \gls{QC} that was carried out for each population is described elsewhere.\cite{Gurdasani2015} All steps except heterozygosity calculations and IBD sample pruning were carried out with PLINK; heterozygosity calculations are erroneous for PLINK and PLINK cannot do \gls{IBD} sample pruning, which is an \gls{NP}-complete problem. Instead we used Python for these tasks.\footnote{\url{https://github.com/team149/tc9/blob/master/QC/QC_IBD_prune.py}} In summary the QC consisted of sequential checks of
 \begin{enumerate}
 \item Sample call proportion (>0.98)
 \item Heterozygous proportion (\textless $\pm$ 3\glspl{SD})
@@ -37,16 +39,17 @@ The data was split by population and platform (i.e. quad and octo) and \gls{QC} 
 \item \gls{HWE} (\textit{p}$_{HWE}$<10$^{-6}$) on all autosomal SNPs and female X chromosome SNPs.
 \end{enumerate}
 
+
+
 \subsection{Curation of original and down-sampled sequence data}
-In addition to carrying out \gls{QC} of the \gls{SNP} array data, we also did data curation of the low coverage and \gls{ULC} sequence data. A flow diagram illustrating the variant calling process is shown in figures \ref{fig:SN09f1} and \ref{fig:SN12f1}.
+In addition to carrying out \gls{QC} of the \gls{SNP} array data, we also did data curation of the low coverage and \gls{ULC} sequence data for the 3 populations. A flow diagram illustrating the variant calling process and further data processing is shown in figures \ref{fig:SN09f1} and \ref{fig:SN12f1}.
 \input{fig/SN09f1}
-\input{fig/SN12f2}
 
 The data curation process after sequencing involves mapping of reads to the reference genome, \gls{BAM} file pre-processing, variant calling, variant filtering, genotype likelihood refinement and phasing to obtain haplotypes.
 
-The data is also down-sampled to lower coverage prior to \gls{BAM} file pre-processing for the purpose of identifying the most cost effective study design.
+The data is also down-sampled to lower coverage prior to \gls{BAM} file pre-processing for the purpose of identifying the most cost effective study design. Specifically the data was randomly down-sampled to 0.5x, 1x and 2x coverage using \href{https://www.broadinstitute.org/gatk/gatkdocs/org_broadinstitute_gatk_tools_walkers_readutils_PrintReads.php}{GATK PrintReads} as described on page \pageref{subsubsec:downsampling} prior to pre-processing of the raw reads.
 
-A flow diagram explaining the curation of \gls{WGS} data down-sampled to lower coverage and the comparison with \gls{WGS} data at higher coverage and imputed SNP array data is shown in figure \ref{fig:SN12f1}.
+A flow diagram explaining the curation of \gls{WGS} data down-sampled to lower coverage and the comparison with \gls{WGS} data at higher coverage and imputed SNP array data is shown in figure \ref{fig:SN12f1}. The down-sampling is carried out prior to pre-processing of raw reads after initial alignment as described in detail on page \pageref{subsubsec:downsampling}.
 \input{fig/SN12f1}
 
 \subsubsection{Sequencing}
@@ -58,7 +61,8 @@ Sequence data for the same SNP array genotyped populations was also generated (t
 \subsubsection{QC of raw reads}
 In order to ensure the quality of the raw reads produced for the project, an automatic \gls{QC} system was employed by \gls{HGI} at the \gls{WTSI} to reduce the number of data files that required manual intervention. This system was been derived from the one originally designed for the UK10K project and uses a series of empirically derived thresholds to assess summary metrics calculated from the input \glspl{BAM}. These thresholds include: percentage of reads mapped; percentage of duplicate reads marked; various statistics measuring indel distribution against read cycle and an insert size overlap percentage. Any lanes that fell below the "fail" threshold for any of the metrics were excluded; any lanes that fell below the "warn" threshold on a metric were manually examined; and any lane that did not fall below either of these thresholds for any of the metrics was given a status of "pass" and allowed to proceed into the later stages of the pipeline.
 
-\subsubsection{Downsampling}
+\subsubsection{Downsampling to lower coverage}
+\label{subsubsec:downsampling}
 Downsampling to a lower coverage was carried out to enable comparison of ultra low coverage study designs with low coverage and SNP array study designs. Samples were downsampled to average coverages of 8x, 4x, 2x, 1x and 0.5x. Downsampling was carried out on the raw reads converted to lanelet bam files prior to pre-processing to best simulate a real case scenario. Instead of downsampling by unit fractions\cite{10.1371/journal.pcbi.1002604}, downsampling was carried out to achieve a specific integer value coverage across all samples in a given population. The downsampling fraction (equation \ref{eq:downsampling}) was calculated from the initial coverage across all samples, which was calculated from the number of mapped reads, which was counted with samtools\cite{Li15082009} flagstat. The read length on the Illumina HiSeq2000 is 100. We divided by the number of non N bases in the reference genome (2.85\gls{Gbp}) to which reads can be mapped.
 
 \begin{equation}
@@ -88,7 +92,7 @@ We mark duplicates for exclusion, because sequencing errors are otherwise propag
 %Recommendations here: https://www.broadinstitute.org/gatk/guide/article?id=1247
 
 \subsubsection{Variant Calling}
-We evaluated different variant calling software packages. We decided to use \gls{GATK} \gls{UG}. It has an ability to call more \glspl{SNP} with a quality above 4 than any other variant caller (figure \ref{fig:venn4_varcall_Platypus_filter_QUAL4_incl_MNPs_TiTv}). We did not evaluate whether all of the called variants were true positives, but we did take note of the variants unique to \gls{UG} having a relatively high \gls{TiTv} ratio, which indicates that the variants could be true positives. Furthermore the variants were counted prior to filtering, which would further filter out false positives. Hence a high sensitivity at this stage is preferable. If more time had been available, then we would have calculated the sensitivity and specificity for each variant caller by comparison to a truth set. We would also have evaluated indel calling abilities.
+We evaluated different variant calling software packages. We decided to use \gls{GATK} \gls{UG}. It has an ability to call more \glspl{SNP} with a quality above 4 than any other variant caller (figure \ref{fig:venn4_varcall_Platypus_filter_QUAL4_incl_MNPs_TiTv}). We did not evaluate whether all of the called variants were true positives, but we did take note of the variants unique to \gls{UG} having a relatively high \gls{TiTv} ratio, which indicates that the variants could be true positives. Furthermore the variant count was carried out prior to filtering, which would further filter out false positives. Hence a high sensitivity at this stage is preferable. If more time had been available, then we would have calculated the sensitivity and specificity for each variant caller by comparison to a truth set. We would also have evaluated indel calling abilities.
 
 \input{fig/venn4_varcall_Platypus_filter_QUAL4_incl_MNPs_TiTv}
 
@@ -106,6 +110,10 @@ number of samples we changed the default Phred quality score threshold at which 
 \item MappingQualityUnavailableFilter to filter out reads with a mapping quality of zero.
 \item BadMateFilter to filter out reads whose mate maps to a different contig.
 \end{itemize}
+
+For the final variant calling prior to the generation of the reference panel and simulation of the SNP array we did not include the samples NA12878 and NA19240 in the joint variant calling. This was to avoid bias in annotations used for filtering and to avoid inclusion of variants unique to either or both of the two samples.
+
+Only the 120 Ethiopian samples were sequenced to 8x (table \ref{tab:samples} on page \pageref{tab:samples}). This dataset was therefore called separately unlike the lower coverage datasets, which were called across all samples.
 
 \subsubsection{Variant Filtering}
 The Gaussian mixture model of \gls{GATK} \gls{VR} was used for filtering called variants. The machine learning method was run simultaneously across all autosomes. The filtering is based on a \gls{VQSLOD} score, which is the log odds ratio of being a true variant versus being false under the trained Gaussian mixture model. The annotations we used for the model were
@@ -127,19 +135,19 @@ We carried out a comparison of variant calling and variant filtering strategies.
 After deciding on the best variant calling approach we wanted to decide on an optimal truth sensitivity threshold. For this purpose we included the 1000G samples NA12878 (\gls{CEU}) and NA19240 (\gls{YRI}) in the joint variant calling. The two samples have been sequenced by Complete Genomics\cite{Drmanac01012010} and Illumina\footnote{http://www.illumina.com/platinumgenomes/} to high coverage. We chose these samples, because a highly curated set of variant calls exist for NA12878\cite{Zook2014} and because NA19240 is an African sample. The reads we included in the joint variant calling were low coverage from the 20121211 release of 1000G; i.e. NA12878 at 6.4x and NA19240 at 4.1x. We chose a truth sensitivity threshold based on a \gls{ROC} curve sorted by \gls{VQSLOD} values (figure \ref{fig:SN09f2}). Ultimately we decided on a threshold of 99\%, which corresponds to a sensitivity of 88\%. This was also in accordance with \gls{GATK} best practices at the time.
 \input{fig/SN09f2}
 
-For the final variant calling prior to the generation of the reference panel and simulation of the SNP array we did not include the samples NA12878 and NA19240 in the joint variant calling. This was to avoid bias in annotations used for filtering and to avoid inclusion of variants unique to either or both of the two samples.
-
 \subsubsection{Genotype probability refinement}
 \label{subsec:AGVrefinement}
-We carried out refinement and imputation with version 3.3.2 of Beagle.\cite{Browning20071084} We chose to carry out imputation with \gls{1000G} phase 1 as a reference panel, because of the small samples size. Using a reference panel was shown to improve imputation accuracy (figure \ref{fig:SN09f3}, which was calculated by comparison with SNP array genotypes using Python.\footnote{https://github.com/team149/tc9/tree/master/comparison/correlation.py}
+We expected the false positive rate to be reduced following refinement of the genotype probabilities derived from the low coverage sequence data. Therefore we carried out refinement and imputation with version 3.3.2 of the software Beagle.\cite{Browning20071084} We chose to carry out imputation with \gls{1000G} phase 1 as a reference panel, because of the small samples size. Using a reference panel was shown to improve imputation accuracy (figure \ref{fig:SN09f3}, which was calculated by comparison with SNP array genotypes using Python.\footnote{https://github.com/team149/tc9/tree/master/comparison/correlation.py}
 \input{fig/SN09f3}
 
+\paragraph{Evaluation of reference panel upon exclusion of rare variants from it}
 A modified 1000G phase reference panel was distributed with Beagle3.\footnote{\url{http://bochet.gcc.biostat.washington.edu/beagle/1000_Genomes.phase1_release_v3}} Rare variants with less than 5 allele counts out of 1092 samples and multiallelic SNPs and indels were removed from the March 2012 release of the Beagle3 distributed 1000G phase 1 reference panel. The low frequency markers were omitted, because genotype errors for low frequency markers in 1000G can possibly affect nearby markers.\footnote{Private correspondence with Brian Browning} We wanted to test this and carried out imputation with the full 1000G phase 1 reference panel and the reduced reference panel distributed with Beagle3. The reduced reference panel was shown to lead to a greater imputation accuracy than the full reference panel (figure \ref{fig:imp_accu_beagle}). Therefore we used the reduced reference panel at the cost of not imputing very rare variants from 1000G phase 1.
 \input{fig/imp_accu_beagle}
 
+\paragraph{Evaluation of the best refinement software and sequence of implementation}
 To identify the best imputation software and imputation approach we tried out various approaches. In addition to Beagle3 we carried out imputation with IMPUTE2\cite{10.1371/journal.pgen.1000529} with different parameter settings. It has previously been suggested that sequential imputation approaches can increase the accuracy compared to single step imputation.\cite{Pasaniuc2012}
 %"We also attempted running MaCH/Thunder starting from results of Beagle but the increase in accuracy was marginal"
-We therefore used IMPUTE2 separately and in succession with Beagle3. We used IMPUTE2 with the -{}-pgs\_prob argument, which tells IMPUTE2 to estimate posterior probabilities. We assesed accuracy as correlation with genotypes on the Omni2.5M SNP array. This comparison was only carried out for the 100 Baganda samples sequenced to a 4x coverage, which had been called and filtered separately of the two other populations. We used a truth sensitivity threshold of 96\% for this analysis.
+We therefore used IMPUTE2 separately and in succession with Beagle3. We used IMPUTE2 with the -{}-pgs\_prob argument, which tells IMPUTE2 to estimate posterior probabilities. We assessed accuracy as correlation with genotypes on the Omni2.5M SNP array. This comparison was only carried out for the 100 Baganda samples sequenced to a 4x coverage, which had been called and filtered separately of the two other populations. We used a truth sensitivity threshold of 96\% for this analysis.
 Ultimately we decided that imputation with Beagle3\cite{Browning20071084} using a \gls{1000G} phase 1 reference panel yielded a greater imputation accuracy upon comparison with SNP array genotypes (figures \ref{fig:imp_accu_improv_refiners} \ref{fig:SN09f4}).
 \input{fig/imp_accu_improv_refiners}
 \input{fig/SN09f4}
@@ -150,15 +158,35 @@ We carried out refinement of existing genotype probabilities and inferred missin
 \subsubsection{Post-refinement \gls{QC}}
 We checked for heterozygosity and \gls{PCA} outliers after refinement, but did not exclude additional samples. Heterozygosity was calculated with GNU Awk\footnote{\url{http://www.gnu.org/software/gawk/manual/gawk.html}} and principal components with Eigensoft4.2\cite{10.1371/journal.pgen.0020190}\cite{Price2006}
 
-\subsection{Correlation}
+
+
+\subsection{Comparison of down-sampled data with other study designs}
+We evaluated the ability to call genotypes with \gls{ULC} sequence data by comparison to SNP array data for a subset of the samples and the original non-downsampled data by calculation of genotype correlation (page \pageref{subsec:correlation}) and calculation of sensitivity and specificity (page \pageref{subsec:sensspec}) respectively.
+
+\subsubsection{Correlation}
+\label{subsec:correlation}
+SNP array data was available for a subset of the sequenced samples, and it was therefore possible to evaluate the \gls{ULC} data by comparison of genotypes from each source and calculation of correlations between these.
+The calculated correlations are subsequently used to calculate apparent sample sizes at a fixed budget (page \pageref{subsec:samplesize}).
 Unless otherwise stated we carried out calculations of correlation as described in this section. Correlation is calculated irrespective of SNP call rate and posterior genotype probabilities using Python\footnote{\url{https://github.com/team149/tc9/blob/master/comparison/correlation.py}}. Hence the correlation is calculated for \glspl{SNP} with high and low imputation quality. Dosages are calculated from the genotype probabilities and correlation is calculated using dosages. The correlation is calculated as a simple average of correlations in each \gls{MAF} bin instead of calculating the correlation for all genotypes for all \glspl{SNP} in each \gls{MAF} bin. The calculation is only carried out for sites that are variant on both the chip and in the sequence data. Hence a correlation will not be calculated, when a monomorphic site is called and refined as a variant site and vice versa. The Omni2.5 \gls{SNP} array has been shown to contain incorrectly genotyped SNPs\cite{Gurdasani2015}, but we cannot predict which ones they are, so we didn't take extra measures to take these into account and remove them from the data set prior to calculation of correlations.
+
+\subsubsection{Sensitivity and specificity}
+\label{subsec:sensspec}
+The down-sampled data and the SNP array data was compared to the higher coverage data by calculation of sensititivy and specificty (figure \ref{fig:SN12f2}). Sensitivity is the proportion of genotypes in a set of reference high coverage samples, which are correctly called in the calls from the down-sampled data and the SNP array data. Specificity (1 - false positive rate) is the proportion of genotypes in a set of down-sampled samples, which are identical to the reference samples at higher coverage.
+The \gls{SNP} array data was compared to the reference sequence data (4x/8x) after imputation with the software IMPUTE2 using the \gls{1000G} phase 1 reference panel.
+
+\input{fig/SN12f2}
+
+
 
 \subsection{Calculation of apparent sample sizes}
 \label{subsec:samplesize}
-For the calculation of apparent sample sizes the values in table \ref{tab:costs} were used. The total cost  for $n$ number of samples is calculated with equation \ref{eq:apparent_sample_size}. The apparent sample size at a given coverage and \gls{MAF} is calculated as the product of the sensitivity at that \gls{MAF} and the cost at that coverage. Computational costs are not included, but assuming a \gls{CPU} hour costs \gls{GBP} 0.17, disk storage is free and no steps are repeated, then the computational cost for 100 samples at 8x is at least \gls{GBP} 1500. In comparison \gls{SNP} array associated computational costs are negligible and do not require an extensive framework.
+To do an assesment of the cost effectivnes of different study designs we want to calculate the apparent sample size at a fixed budget by looking at the coverage that can be obtained for a given study design. We multiply the given sample size by the accuracy of the genotype calling of sequence data to get the apparent sample size. For the calculation of the sample size at a fixed budget the values in table \ref{tab:costs} were used. The total cost  for $n$ number of samples is calculated with equation \ref{eq:sample_size}. The apparent sample size at a given coverage and \gls{MAF} is calculated as the product of the sensitivity at that \gls{MAF} and the cost at that coverage. For the SNP array data the \gls{r2} metric (r\textsuperscript{2}\_typeX) obtained after imputation by means of masking as described in the documentation\footnote{\url{https://mathgen.stats.ox.ac.uk/impute/impute_v2.html}} is used for calculation of apparent sample size. The rare variants in particular might be affected by SNP ascertainment and should therefore be considered upper limits, but the correlations should represent the truth for common variants for which ascertainment is less pronounced.
+
+Computational costs are not included, but assuming a \gls{CPU} hour costs \gls{GBP} 0.17, disk storage is free and no steps are repeated, then the computational cost for 100 samples at 8x is at least \gls{GBP} 1,500. In comparison \gls{SNP} array associated computational costs are negligible and do not require an extensive framework.
 \input{tab/costs}
 
+% what are the magic numbers 8 and 4? I forgot...
 \begin{equation}
 \text{sequencing cost for } n \text{ samples} = \text{lane cost} \times n/(8 \times 4 / \text{coverage}) + n \times \text{library cost}
-\label{eq:apparent_sample_size}
+\label{eq:sample_size}
 \end{equation}

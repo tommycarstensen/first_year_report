@@ -1,5 +1,6 @@
 \section{Results}
 
+
 \subsection{Data description after QC}
 \label{sec:agv_data_description}
 Related and unrelated male and female samples from 3 different African populations (table \ref{tab:short_summary}) were genotyped using the Illumina HumanOmni2.5 genotype chip array and sequenced on an Illumina HiSeq 2000 to different depths of coverage (table \ref{tab:samples}) and subsequently downsampled to a similar coverage of 4x (figure \ref{fig:coverage}). The \gls{QC} of the samples genotyped on the Illumina HumanOmni2.5-4 and 2.5-8 platforms is described elsewhere\cite{Gurdasani2015} and on page \pageref{subsec:chipQC}.
@@ -9,25 +10,34 @@ Each of the two methods for obtaining genotypes yields a different number of non
 \input{tab/chip_SNPs}
 The majority of the sequenced \glspl{SNP} are already present in phase 1 of \gls{1000G}\cite{1000G2012}, but novel SNPs are present in all three populations (figure \ref{fig:intersection}).
 
+\input{fig/intersection}
+
 %\subsubsection{Comparison of variant calling and refinement methods}
 %\subsubsection{Comparison of variant calling software}
 %\subsubsection{Comparison of refinement software and reference panels}
 
-\subsection{Data description after downsampling}
-
-As the coverage drops the ability to call rare \glspl{SNP} decreases (figure \ref{fig:downsampling_SNP_count} and table\ref{tab:downsampling_omni_intersection}). At lower coverage the genotype correlation between the calls from the SNP array and sequencing platforms is also reduced and especially for rare variants (figure \ref{fig:SN12f5}).
-\input{fig/SN12f5}
-
-\input{fig/downsampling_SNP_count}
-\input{fig/intersection}
-\input{tab/downsampling_omni_intersection}
 
 \subsection{Comparison of whole genome sequencing and SNP array designs}
+\label{subsec:result_downsampling_sensspec}
+The sensitivity and specificity was evaluated for each of the study designs as described on page \pageref{subsec:sensspec}. The sensitivity of all study designs was greater than 0.95 for common variants (\gls{MAF} greater than 0.05) with respect to 8x for Ethiopians (figure \ref{fig:SN12f3}) and 4x sequence data for all populations (\ref{fig:SN12f4}). For variants with a \gls{MAF} less than 0.05 the sensitivity was lower. The sensitivity for singletons and novel variants relative to 1000G phase 1 was even lower, which is expected, since very few reads will support singletons. The sensitivity of the imputed SNP array data (Omni2.5) is comparable to that of the 0.5x coverage design. However, the disadvantage of the \gls{SNP} array design is the inability to acquire genotypes of novel variants, but this will ineviatiably become less relevant as the size and diversity of reference panels for imputation grow. All designs had high specificity relative to the higher coverage reference sequence data (8x figure \ref{fig:SN12f3} and 4x figure \ref{fig:SN12f4}), which indicates a low \gls{FPR} or identical false positives in the reference data.
 
 \input{fig/SN12f3}
 \input{fig/SN12f4}
 
+
+\subsection{Data description after downsampling}
+\label{subsec:result_downsampling}
+
+As the coverage drops the ability to call rare \glspl{SNP} decreases (figure \ref{fig:downsampling_SNP_count} and table\ref{tab:downsampling_omni_intersection}). At lower coverage the genotype correlation between the calls from the SNP array and sequencing platforms is also reduced and especially for rare variants (figure \ref{fig:SN12f5}). Despite the correlations not being perfect for lower coverage designs for rare and common variants (figure \ref{fig:SN12f5}) the apparent sample size is still greater due to the greater sample size and in the case of common variants in particular compensates for inaccuracies in identifying true genotypes (figure \ref{fig:SN12f6} on page \pageref{subsec:result_apparent}).
+
+\input{fig/downsampling_SNP_count}
+\input{tab/downsampling_omni_intersection}
+\input{fig/SN12f5}
+
+
 \subsection{Apparent sample size}
-By using the costs in table \ref{tab:costs} and equation \ref{eq:apparent_sample_size} we calculated the apparent sample size for different study designs at a fixed cost. When not taking into consideration computational costs the ultra low coverage study design is a good choice for capturing common variation at a low cost.
+\label{subsec:result_apparent}
+
+By using the costs in table \ref{tab:costs} and equation \ref{eq:sample_size} and the calculated correlations we calculated the apparent sample size for different study designs at a fixed cost. When not taking into consideration computational costs the ultra low coverage study design is a good choice for capturing common variation at a low cost.
 
 \input{fig/SN12f6} % apparent sample size
